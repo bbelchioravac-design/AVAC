@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NCH AVAC — Assistente de Cálculo</title>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#1a2035"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="NCH AVAC"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f1320;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,sans-serif}
+.nch-wrap{background:#151b2e;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:620px;width:100%;max-width:660px;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+.nch-header{background:#1a2035;padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #2a3050;position:relative;min-height:58px}
+.nch-avatar{width:38px;height:38px;border-radius:50%;background:#2e6be6;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;color:#fff;flex-shrink:0}
+.nch-title{font-size:15px;font-weight:500;color:#e8eaf0}
+.nch-sub{font-size:12px;color:#7a85a0;margin-top:1px}
+.nch-progress{position:absolute;bottom:0;left:0;height:2px;background:#22c55e;transition:width 0.4s}
+.header-btns{position:absolute;right:16px;top:50%;transform:translateY(-50%);display:flex;gap:6px}
+.novo-btn{padding:5px 12px;background:#2e6be6;border:none;border-radius:6px;color:#fff;font-size:12px;cursor:pointer}
+.novo-btn:hover{background:#1d5bd4}
+.menu-btn{padding:5px 10px;background:transparent;border:1px solid #2a3050;border-radius:6px;color:#7a85a0;font-size:12px;cursor:pointer}
+.menu-btn:hover{background:#1a2035;color:#d0d6e8}
+.nch-log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.nch-log::-webkit-scrollbar{width:4px}
+.nch-log::-webkit-scrollbar-thumb{background:#2a3050;border-radius:2px}
+.bot-row{display:flex;align-items:flex-start;gap:10px}
+.bot-av{width:28px;height:28px;border-radius:50%;background:#2e6be6;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#fff;flex-shrink:0;margin-top:2px}
+.bot-bubble{background:#1e2740;border-radius:4px 14px 14px 14px;padding:12px 14px;font-size:14px;color:#d0d6e8;line-height:1.6;max-width:88%}
+.user-bubble{background:#1a2035;border:1px solid #2a3050;border-radius:14px 4px 14px 14px;padding:10px 14px;font-size:14px;color:#c0c8dc;align-self:flex-end;max-width:75%}
+.btns-row{display:flex;gap:8px;flex-wrap:wrap;padding-left:38px}
+.pill-btn{padding:8px 16px;background:#1e3060;border:1px solid #2e4880;border-radius:999px;color:#7eb3f5;font-size:13px;cursor:pointer;transition:all 0.15s}
+.pill-btn:hover{background:#263870;color:#a8ccff}
+.pill-btn:disabled{opacity:0.45;cursor:default}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-left:38px;max-width:95%}
+.mode-card{background:#1e2740;border:1px solid #2a3860;border-radius:10px;padding:16px;cursor:pointer;transition:all 0.15s}
+.mode-card:hover{background:#263050;border-color:#2e6be6}
+.mode-card-icon{font-size:22px;margin-bottom:8px}
+.mode-card-title{font-size:14px;font-weight:500;color:#e8eaf0;margin-bottom:4px}
+.mode-card-desc{font-size:12px;color:#7a85a0;line-height:1.5}
+.input-form{background:#1e2740;border-radius:4px 14px 14px 14px;padding:14px 16px;max-width:96%}
+.form-row{display:flex;gap:8px;margin-bottom:8px;align-items:flex-end;flex-wrap:wrap}
+.form-field{display:flex;flex-direction:column;gap:4px;flex:1;min-width:70px}
+.form-field label{font-size:11px;color:#7a85a0}
+.form-field input,.form-field select{padding:7px 10px;border:1px solid #2a3050;border-radius:6px;background:#151b2e;color:#d0d6e8;font-size:13px;outline:none;width:100%}
+.form-field input:focus,.form-field select:focus{border-color:#2e6be6}
+.add-btn{padding:7px 14px;background:#1e3060;border:1px solid #2e4880;border-radius:6px;color:#7eb3f5;font-size:13px;cursor:pointer;white-space:nowrap;align-self:flex-end}
+.add-btn:hover{background:#263870}
+.items-list{margin:6px 0;display:flex;flex-direction:column;gap:4px}
+.item-tag{display:flex;align-items:center;justify-content:space-between;background:#151b2e;border-radius:6px;padding:6px 10px;font-size:12px;color:#a0aec0}
+.item-tag span{color:#d0d6e8;font-weight:500}
+.del-btn{background:none;border:none;color:#4a5568;cursor:pointer;font-size:13px;padding:0 4px}
+.del-btn:hover{color:#fca5a5}
+.form-actions{display:flex;gap:8px;margin-top:6px}
+.continuar-btn{flex:1;padding:8px;background:#2e6be6;border:none;border-radius:6px;color:#fff;font-size:13px;cursor:pointer}
+.continuar-btn:hover{background:#1d5bd4}
+.skip-btn{flex:1;padding:8px;background:#1e3060;border:1px solid #2e4880;border-radius:6px;color:#7eb3f5;font-size:13px;cursor:pointer}
+.skip-btn:hover{background:#263870}
+.tipo-toggle{display:flex;gap:6px;margin-bottom:8px}
+.tipo-btn{padding:5px 12px;border:1px solid #2a3050;border-radius:999px;background:transparent;color:#7a85a0;font-size:12px;cursor:pointer;transition:all 0.15s}
+.tipo-btn.active{background:#1e3060;border-color:#2e4880;color:#7eb3f5}
+.result-bubble{background:#1e2740;border:1px solid #2a3860;border-radius:4px 14px 14px 14px;padding:14px 16px;max-width:98%}
+.rlabel{font-size:11px;color:#7a85a0;margin-bottom:8px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.mc{background:#151b2e;border-radius:8px;padding:10px}
+.ml{font-size:11px;color:#7a85a0;margin-bottom:3px}
+.mv{font-size:17px;font-weight:500;color:#e8eaf0}
+.mu{font-size:11px;color:#7a85a0;margin-top:2px}
+.rect-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border:1px solid #2a3050;border-radius:8px;margin-bottom:6px}
+.rdims{font-size:13px;font-weight:500;color:#d0d6e8;min-width:105px}
+.rratio{font-size:12px;color:#7a85a0;flex:1}
+.badge{font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500}
+.bok{background:#14532d;color:#86efac}
+.bwarn{background:#451a03;color:#fcd34d}
+.bbad{background:#450a0a;color:#fca5a5}
+.res-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px}
+.res-table th{color:#7a85a0;font-weight:500;text-align:left;padding:4px 6px;border-bottom:1px solid #2a3050}
+.res-table td{color:#d0d6e8;padding:5px 6px;border-bottom:1px solid #1a2035}
+.res-table tr:last-child td{border-bottom:none}
+.total-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.total-card{background:#151b2e;border-radius:8px;padding:12px}
+.total-label{font-size:11px;color:#7a85a0;margin-bottom:4px}
+.total-value{font-size:22px;font-weight:500;color:#22c55e}
+.total-unit{font-size:11px;color:#7a85a0;margin-top:2px}
+.nch-input-row{display:flex;gap:8px;padding:10px 14px;border-top:1px solid #2a3050;background:#1a2035}
+.nch-input{flex:1;padding:9px 12px;border:1px solid #2a3050;border-radius:8px;font-size:14px;background:#151b2e;color:#d0d6e8;outline:none}
+.nch-input::placeholder{color:#4a5568}
+.nch-input:focus{border-color:#2e6be6}
+.nch-input:disabled{opacity:0.35}
+.nch-send{padding:9px 16px;border:none;border-radius:8px;background:#2e6be6;color:#fff;font-size:14px;cursor:pointer}
+.nch-send:hover{background:#1d5bd4}
+.nch-send:disabled{opacity:0.35;cursor:default}
+</style>
+</head>
+<body>
+<div class="nch-wrap">
+  <div class="nch-header">
+    <div class="nch-avatar">A</div>
+    <div>
+      <div class="nch-title">NCH AVAC</div>
+      <div class="nch-sub" id="header-sub">Assistente de Cálculo</div>
+    </div>
+    <div class="header-btns">
+      <button class="menu-btn" id="btn-menu" onclick="irMenu()" style="display:none">Menu</button>
+      <button class="novo-btn" id="btn-novo" onclick="reiniciar()" style="display:none">Novo</button>
+    </div>
+    <div class="nch-progress" id="progress" style="width:0%"></div>
+  </div>
+  <div class="nch-log" id="log"></div>
+  <div class="nch-input-row">
+    <input class="nch-input" id="inp" placeholder="Escreve aqui..." disabled onkeydown="if(event.key==='Enter')enviar()"/>
+    <button class="nch-send" id="sendbtn" onclick="enviar()" disabled>Enviar</button>
+  </div>
+</div>
+
+<script>
+const DN=[80,100,125,150,160,180,200,224,250,280,300,350,400,450,500,550,600];
+const RECT_DIMS=[];for(let v=100;v<=1200;v+=50)RECT_DIMS.push(v);
+const RHO=1.2;
+let modo=null;
+let estadoA={fase:0,modoCalc:null,caudal:null};
+let dadosB={trocos:[],sing90:[],sing45:[],singT:[],fixas:[]};
+
+function log(){return document.getElementById('log')}
+function setProgress(p){document.getElementById('progress').style.width=p+'%'}
+function setSub(t){document.getElementById('header-sub').textContent=t}
+function scroll(){log().scrollTop=log().scrollHeight}
+function showHdr(novo,menu){
+  document.getElementById('btn-novo').style.display=novo?'':'none';
+  document.getElementById('btn-menu').style.display=menu?'':'none';
+}
+function enableInput(ph){const i=document.getElementById('inp');i.disabled=false;i.placeholder=ph||'Escreve aqui...';i.focus();document.getElementById('sendbtn').disabled=false;}
+function disableInput(){document.getElementById('inp').disabled=true;document.getElementById('sendbtn').disabled=true;document.getElementById('inp').value='';}
+function addBot(html){const row=document.createElement('div');row.className='bot-row';row.innerHTML=`<div class="bot-av">A</div><div class="bot-bubble">${html}</div>`;log().appendChild(row);scroll();}
+function addUser(txt){const d=document.createElement('div');d.className='user-bubble';d.textContent=txt;log().appendChild(d);scroll();}
+function addPills(pills){
+  const wrap=document.createElement('div');wrap.className='btns-row';
+  pills.forEach(p=>{const btn=document.createElement('button');btn.className='pill-btn';btn.textContent=p.label;btn.onclick=()=>{wrap.querySelectorAll('.pill-btn').forEach(x=>x.disabled=true);addUser(p.label);p.action();};wrap.appendChild(btn);});
+  log().appendChild(wrap);scroll();
+}
+
+function areaCirc(dn_mm){const r=dn_mm/2000;return Math.PI*r*r;}
+function areaRect(a_mm,b_mm){return(a_mm/1000)*(b_mm/1000);}
+function deqHuebscher(a,b){return 1.265*Math.pow(a*b,0.6)/Math.pow(a+b,0.2);}
+function velocidade(Q_h,area){return(Q_h/3600)/area;}
+function labelSecao(item){return item.tipo==='circ'?`Ø${item.dn}`:`${item.a}×${item.b}`;}
+
+function reiniciar(){
+  if(modo==='a')iniciarModoA();
+  else if(modo==='b'){dadosB={trocos:[],sing90:[],sing45:[],singT:[],fixas:[]};iniciarModoB();}
+}
+function irMenu(){
+  log().innerHTML='';modo=null;estadoA={fase:0,modoCalc:null,caudal:null};
+  dadosB={trocos:[],sing90:[],sing45:[],singT:[],fixas:[]};
+  setProgress(0);disableInput();showHdr(false,false);setSub('Assistente de Cálculo');iniciarMenu();
+}
+
+function iniciarMenu(){
+  setProgress(5);
+  addBot('Olá! Sou o assistente AVAC da NCH.<br>O que queres calcular?');
+  const wrap=document.createElement('div');wrap.className='mode-cards';
+  [{icon:'📐',title:'Dimensionamento de Condutas',desc:'Calcula diâmetro, velocidade e equivalentes retangulares por troço.',cb:()=>{addUser('Dimensionamento de Condutas');modo='a';iniciarModoA();}},
+   {icon:'🔧',title:'Cálculo da Instalação',desc:'Calcula a PED total do circuito mais desfavorável.',cb:()=>{addUser('Cálculo da Instalação');modo='b';iniciarModoB();}}
+  ].forEach(c=>{
+    const card=document.createElement('div');card.className='mode-card';
+    card.innerHTML=`<div class="mode-card-icon">${c.icon}</div><div class="mode-card-title">${c.title}</div><div class="mode-card-desc">${c.desc}</div>`;
+    card.onclick=c.cb;wrap.appendChild(card);
+  });
+  log().appendChild(wrap);scroll();
+}
+
+/* ── MODO A ── */
+function iniciarModoA(){
+  log().innerHTML='';setProgress(10);setSub('Dimensionamento de Condutas');showHdr(true,true);disableInput();
+  estadoA={fase:0,modoCalc:null,caudal:null};
+  addBot('Como queres dimensionar?');
+  addPills([{label:'Por perda de carga (mmca/m)',action:()=>escolherModoA('ped')},{label:'Por velocidade (m/s)',action:()=>escolherModoA('vel')}]);
+}
+function escolherModoA(m){estadoA.modoCalc=m;estadoA.fase=1;setProgress(35);addBot('Qual o <strong>caudal</strong> em m³/h?');enableInput('Caudal em m³/h...');}
+function enviar(){const val=document.getElementById('inp').value.trim();if(!val)return;if(modo==='a')enviarA(val);}
+function enviarA(val){
+  const num=parseFloat(val.replace(',','.'));disableInput();
+  if(isNaN(num)||num<=0){addUser(val);addBot('Valor inválido. Tenta com um número positivo.');enableInput();return;}
+  addUser(val);
+  if(estadoA.fase===1){
+    estadoA.caudal=num;estadoA.fase=2;setProgress(65);
+    if(estadoA.modoCalc==='ped'){addBot('Qual a <strong>perda de carga</strong> em mmca/m?');enableInput('PED em mmca/m...');}
+    else{addBot('Qual a <strong>velocidade</strong> em m/s?');enableInput('Velocidade em m/s...');}
+  } else if(estadoA.fase===2){
+    setProgress(100);const res=calcularA(estadoA.caudal,num,estadoA.modoCalc);addResultA(res);
+    estadoA.fase=1;estadoA.caudal=null;
+    setTimeout(()=>{setProgress(20);addBot('Queres calcular outra conduta?');
+      addPills([{label:'Sim, mesmo modo',action:()=>{estadoA.fase=1;setProgress(35);addBot('Qual o <strong>caudal</strong> em m³/h?');enableInput('Caudal em m³/h...');}},
+        {label:'Mudar modo',action:()=>iniciarModoA()},{label:'Menu principal',action:()=>irMenu()}]);},400);
+  }
+}
+function calcularA(Q_h,param,mc){
+  const Q=Q_h/3600,lambda=0.02;let D_calc_m;
+  if(mc==='ped'){const dPm_Pa=param*9.81;D_calc_m=Math.pow((lambda*RHO*Q*Q*8)/(Math.PI*Math.PI*dPm_Pa),1/5);}
+  else D_calc_m=Math.sqrt(4*Q/(Math.PI*param));
+  const D_calc_mm=D_calc_m*1000;
+  const D_norm=DN.reduce((p,c)=>Math.abs(c-D_calc_mm)<Math.abs(p-D_calc_mm)?c:p);
+  const D_norm_m=D_norm/1000,A=Math.PI*D_norm_m*D_norm_m/4,v_real=Q/A;
+  const dPm_Pa=lambda*RHO*v_real*v_real/(2*D_norm_m),dPm_mmca=dPm_Pa/9.81;
+  return{D_norm,D_calc_mm,v_real,dPm_Pa,dPm_mmca,rects:calcRects(D_norm)};
+}
+function calcRects(D_norm){
+  const dims=[];
+  for(let a=100;a<=1200;a+=50)for(let b=100;b<=a;b+=50){const deq=deqHuebscher(a,b);dims.push({a,b,deq,diff:Math.abs(deq-D_norm),ratio:a/b});}
+  dims.sort((x,y)=>x.diff-y.diff);const out=[],seen=new Set();
+  for(const d of dims){const k=`${d.a}x${d.b}`;if(!seen.has(k)&&out.length<3){seen.add(k);out.push(d);}if(out.length>=3)break;}
+  return out;
+}
+function addResultA(r){
+  const row=document.createElement('div');row.className='bot-row';
+  const av=document.createElement('div');av.className='bot-av';av.textContent='A';
+  const bubble=document.createElement('div');bubble.className='result-bubble';
+  bubble.innerHTML=`
+    <div class="rlabel">Conduta circular</div>
+    <div class="metrics">
+      <div class="mc"><div class="ml">Diâmetro norm.</div><div class="mv">Ø ${r.D_norm}</div><div class="mu">mm (calc: ${Math.round(r.D_calc_mm)} mm)</div></div>
+      <div class="mc"><div class="ml">Velocidade real</div><div class="mv">${r.v_real.toFixed(2)}</div><div class="mu">m/s</div></div>
+      <div class="mc"><div class="ml">Perda linear</div><div class="mv">${r.dPm_Pa.toFixed(2)}</div><div class="mu">Pa/m · ${r.dPm_mmca.toFixed(3)} mmca/m</div></div>
+    </div>
+    <div class="rlabel">Equivalentes retangulares</div>
+    ${r.rects.map(rc=>`<div class="rect-row"><div class="rdims">${rc.a} × ${rc.b} mm</div><div class="rratio">rácio ${rc.ratio.toFixed(1)}:1 · Deq ${Math.round(rc.deq)} mm</div><span class="badge ${rc.ratio<=4?'bok':rc.ratio<=8?'bwarn':'bbad'}">${rc.ratio<=4?'recomendado':rc.ratio<=8?'aceitável':'evitar'}</span></div>`).join('')}
+  `;
+  row.appendChild(av);row.appendChild(bubble);log().appendChild(row);scroll();
+}
+
+/* ── MODO B ── */
+function iniciarModoB(){
+  log().innerHTML='';setProgress(5);setSub('Cálculo da Instalação');showHdr(true,true);disableInput();
+  dadosB={trocos:[],sing90:[],sing45:[],singT:[],fixas:[]};
+  addBot('Vou calcular a <strong>PED total da instalação</strong>.<br>Mistura circular e retangular à vontade.');
+  setTimeout(()=>passoTrocos(),400);
+}
+
+function buildSecaoFields(prefix){
+  return `
+    <div class="tipo-toggle">
+      <button class="tipo-btn active" id="${prefix}-btn-circ" onclick="setTipo('${prefix}','circ')">Circular</button>
+      <button class="tipo-btn" id="${prefix}-btn-rect" onclick="setTipo('${prefix}','rect')">Retangular</button>
+    </div>
+    <div id="${prefix}-circ" style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="form-field" style="min-width:100px"><label>Diâmetro</label><select id="${prefix}-dn">${DN.map(d=>`<option value="${d}">Ø ${d}</option>`).join('')}</select></div>
+    </div>
+    <div id="${prefix}-rect" style="display:none;gap:8px;flex-wrap:wrap">
+      <div class="form-field" style="min-width:80px"><label>Largura a (mm)</label><select id="${prefix}-a">${RECT_DIMS.map(d=>`<option value="${d}">${d}</option>`).join('')}</select></div>
+      <div class="form-field" style="min-width:80px"><label>Altura b (mm)</label><select id="${prefix}-b">${RECT_DIMS.map(d=>`<option value="${d}">${d}</option>`).join('')}</select></div>
+    </div>`;
+}
+function setTipo(prefix,tipo){
+  document.getElementById(`${prefix}-btn-circ`).className='tipo-btn'+(tipo==='circ'?' active':'');
+  document.getElementById(`${prefix}-btn-rect`).className='tipo-btn'+(tipo==='rect'?' active':'');
+  document.getElementById(`${prefix}-circ`).style.display=tipo==='circ'?'flex':'none';
+  document.getElementById(`${prefix}-rect`).style.display=tipo==='rect'?'flex':'none';
+}
+function getTipo(prefix){return document.getElementById(`${prefix}-btn-circ`).classList.contains('active')?'circ':'rect';}
+function getSecao(prefix){
+  const tipo=getTipo(prefix);
+  if(tipo==='circ')return{tipo,dn:parseInt(document.getElementById(`${prefix}-dn`).value)};
+  return{tipo,a:parseInt(document.getElementById(`${prefix}-a`).value),b:parseInt(document.getElementById(`${prefix}-b`).value)};
+}
+
+function passoTrocos(){
+  setProgress(15);addBot('Passo 1 de 5 — <strong>Troços de conduta reta</strong><br>Circular ou retangular — à tua escolha.');
+  const row=document.createElement('div');row.className='bot-row';
+  const av=document.createElement('div');av.className='bot-av';av.textContent='A';
+  const form=document.createElement('div');form.className='input-form';
+  form.innerHTML=`
+    ${buildSecaoFields('t')}
+    <div class="form-row" style="margin-top:8px">
+      <div class="form-field"><label>Comprimento (m)</label><input type="number" id="t-comp" placeholder="ex: 10" min="0.1" step="0.1"/></div>
+      <div class="form-field"><label>PED (mmca/m)</label><input type="number" id="t-ped" placeholder="ex: 0.10" step="0.01"/></div>
+      <button class="add-btn" onclick="addTroco()">+ Adicionar</button>
+    </div>
+    <div class="items-list" id="t-list"></div>
+    <div class="form-actions"><button class="continuar-btn" onclick="passoCurvas90()">Continuar →</button></div>
+  `;
+  row.appendChild(av);row.appendChild(form);log().appendChild(row);scroll();
+}
+function addTroco(){
+  const secao=getSecao('t');
+  const comp=parseFloat(document.getElementById('t-comp').value);
+  const ped=parseFloat(document.getElementById('t-ped').value);
+  if(!comp||!ped||comp<=0||ped<=0){alert('Preenche comprimento e PED.');return;}
+  dadosB.trocos.push({...secao,comp,ped});
+  renderListB('t-list',dadosB.trocos,i=>{const t=dadosB.trocos[i];return`${labelSecao(t)} — ${t.comp}m — ${t.ped} mmca/m`;});
+  document.getElementById('t-comp').value='';document.getElementById('t-ped').value='';
+}
+
+function buildSingForm(prefix,addFn,skipFn,nextFn){
+  const row=document.createElement('div');row.className='bot-row';
+  const av=document.createElement('div');av.className='bot-av';av.textContent='A';
+  const form=document.createElement('div');form.className='input-form';
+  form.innerHTML=`
+    ${buildSecaoFields(prefix)}
+    <div class="form-row" style="margin-top:8px">
+      <div class="form-field"><label>Caudal (m³/h)</label><input type="number" id="${prefix}-q" placeholder="ex: 500"/></div>
+      <div class="form-field" style="max-width:70px"><label>Qtd.</label><input type="number" id="${prefix}-qty" value="1" min="1"/></div>
+      <button class="add-btn" onclick="${addFn}()">+ Adicionar</button>
+    </div>
+    <div class="items-list" id="${prefix}-list"></div>
+    <div class="form-actions">
+      <button class="skip-btn" onclick="addUser('Nenhuma');${skipFn}()">Nenhuma</button>
+      <button class="continuar-btn" onclick="${nextFn}()">Continuar →</button>
+    </div>
+  `;
+  row.appendChild(av);row.appendChild(form);log().appendChild(row);scroll();
+}
+function addSing(arr,prefix,label){
+  const secao=getSecao(prefix);
+  const q=parseFloat(document.getElementById(`${prefix}-q`).value);
+  const qty=parseInt(document.getElementById(`${prefix}-qty`).value)||1;
+  if(!q||q<=0){alert('Preenche o caudal.');return;}
+  arr.push({...secao,caudal:q,qty});
+  renderListB(`${prefix}-list`,arr,i=>`${labelSecao(arr[i])} — ${arr[i].caudal} m³/h — ${arr[i].qty}× ${label}`);
+  document.getElementById(`${prefix}-q`).value='';document.getElementById(`${prefix}-qty`).value='1';
+}
+
+function passoCurvas90(){
+  if(dadosB.trocos.length===0){alert('Adiciona pelo menos um troço.');return;}
+  addUser('Continuar →');setProgress(30);
+  addBot('Passo 2 de 5 — <strong>Curvas de 90°</strong>');
+  buildSingForm('c90','addC90','skipC90','passoCurvas45');
+}
+function addC90(){addSing(dadosB.sing90,'c90','Curva 90°');}
+function skipC90(){passoCurvas45();}
+
+function passoCurvas45(){
+  addUser('Continuar →');setProgress(45);
+  addBot('Passo 3 de 5 — <strong>Curvas de 45°</strong>');
+  buildSingForm('c45','addC45','skipC45','passoDerivacoes');
+}
+function addC45(){addSing(dadosB.sing45,'c45','Curva 45°');}
+function skipC45(){passoDerivacoes();}
+
+function passoDerivacoes(){
+  addUser('Continuar →');setProgress(60);
+  addBot('Passo 4 de 5 — <strong>Derivações em T</strong>');
+  buildSingForm('dt','addDT','skipDT','passoFixas');
+}
+function addDT(){addSing(dadosB.singT,'dt','Derivação T');}
+function skipDT(){passoFixas();}
+
+function passoFixas(){
+  addUser('Continuar →');setProgress(75);
+  addBot('Passo 5 de 5 — <strong>Perdas fixas</strong><br>Grelhas, registos, filtros, etc.');
+  const row=document.createElement('div');row.className='bot-row';
+  const av=document.createElement('div');av.className='bot-av';av.textContent='A';
+  const form=document.createElement('div');form.className='input-form';
+  form.innerHTML=`
+    <div class="form-row">
+      <div class="form-field" style="flex:2"><label>Descrição</label><input type="text" id="fx-desc" placeholder="ex: Grelha de insuflação"/></div>
+      <div class="form-field"><label>Perda (Pa)</label><input type="number" id="fx-pa" placeholder="ex: 20"/></div>
+      <button class="add-btn" onclick="addFixa()">+ Adicionar</button>
+    </div>
+    <div class="items-list" id="fx-list"></div>
+    <div class="form-actions">
+      <button class="skip-btn" onclick="addUser('Nenhuma');calcularTotal()">Nenhuma</button>
+      <button class="continuar-btn" onclick="calcularTotal()">Calcular PED total →</button>
+    </div>
+  `;
+  row.appendChild(av);row.appendChild(form);log().appendChild(row);scroll();
+}
+function addFixa(){
+  const desc=document.getElementById('fx-desc').value.trim();
+  const pa=parseFloat(document.getElementById('fx-pa').value);
+  if(!desc||isNaN(pa)||pa<0){alert('Preenche descrição e Pa.');return;}
+  dadosB.fixas.push({desc,pa});
+  renderListB('fx-list',dadosB.fixas,i=>`${dadosB.fixas[i].desc} — ${dadosB.fixas[i].pa} Pa`);
+  document.getElementById('fx-desc').value='';document.getElementById('fx-pa').value='';
+}
+
+function renderListB(id,arr,labelFn){
+  const list=document.getElementById(id);if(!list)return;
+  list.innerHTML='';
+  arr.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='item-tag';
+    d.innerHTML=`<span>${labelFn(i)}</span><button class="del-btn" onclick="delItemB('${id}',${i})">✕</button>`;
+    list.appendChild(d);
+  });scroll();
+}
+function delItemB(lid,idx){
+  if(lid==='t-list'){dadosB.trocos.splice(idx,1);renderListB('t-list',dadosB.trocos,i=>{const t=dadosB.trocos[i];return`${labelSecao(t)} — ${t.comp}m — ${t.ped} mmca/m`;});}
+  else if(lid==='c90-list'){dadosB.sing90.splice(idx,1);renderListB('c90-list',dadosB.sing90,i=>`${labelSecao(dadosB.sing90[i])} — ${dadosB.sing90[i].caudal} m³/h — ${dadosB.sing90[i].qty}× Curva 90°`);}
+  else if(lid==='c45-list'){dadosB.sing45.splice(idx,1);renderListB('c45-list',dadosB.sing45,i=>`${labelSecao(dadosB.sing45[i])} — ${dadosB.sing45[i].caudal} m³/h — ${dadosB.sing45[i].qty}× Curva 45°`);}
+  else if(lid==='dt-list'){dadosB.singT.splice(idx,1);renderListB('dt-list',dadosB.singT,i=>`${labelSecao(dadosB.singT[i])} — ${dadosB.singT[i].caudal} m³/h — ${dadosB.singT[i].qty}× Derivação T`);}
+  else if(lid==='fx-list'){dadosB.fixas.splice(idx,1);renderListB('fx-list',dadosB.fixas,i=>`${dadosB.fixas[i].desc} — ${dadosB.fixas[i].pa} Pa`);}
+}
+
+function calcSingPerda(item,zeta){
+  const area=item.tipo==='circ'?areaCirc(item.dn):areaRect(item.a,item.b);
+  const v=velocidade(item.caudal,area);
+  return{pa:zeta*0.5*RHO*v*v*item.qty,v};
+}
+
+function calcularTotal(){
+  addUser('Calcular PED total →');setProgress(100);
+  const linhas=[];let totalPa=0;
+  dadosB.trocos.forEach(t=>{const pa=t.ped*9.81*t.comp;linhas.push({desc:`${labelSecao(t)} — ${t.comp}m @ ${t.ped} mmca/m`,pa});totalPa+=pa;});
+  const addSingLinhas=(arr,zeta,label)=>arr.forEach(c=>{
+    const{pa,v}=calcSingPerda(c,zeta);
+    linhas.push({desc:`${c.qty}× ${label} ${labelSecao(c)} (v=${v.toFixed(2)} m/s)`,pa});totalPa+=pa;
+  });
+  addSingLinhas(dadosB.sing90,0.4,'Curva 90°');
+  addSingLinhas(dadosB.sing45,0.17,'Curva 45°');
+  addSingLinhas(dadosB.singT,0.9,'Derivação T');
+  dadosB.fixas.forEach(f=>{linhas.push({desc:f.desc,pa:f.pa});totalPa+=f.pa;});
+  const totalMmca=totalPa/9.81;
+  const row=document.createElement('div');row.className='bot-row';
+  const av=document.createElement('div');av.className='bot-av';av.textContent='A';
+  const bubble=document.createElement('div');bubble.className='result-bubble';
+  bubble.innerHTML=`
+    <div class="rlabel">Discriminação de perdas</div>
+    <table class="res-table">
+      <thead><tr><th>Elemento</th><th style="text-align:right">Pa</th><th style="text-align:right">mmca</th></tr></thead>
+      <tbody>${linhas.map(l=>`<tr><td>${l.desc}</td><td style="text-align:right">${l.pa.toFixed(1)}</td><td style="text-align:right">${(l.pa/9.81).toFixed(2)}</td></tr>`).join('')}</tbody>
+    </table>
+    <div class="rlabel" style="margin-top:12px">PED total da instalação</div>
+    <div class="total-row">
+      <div class="total-card"><div class="total-label">Pascal</div><div class="total-value">${totalPa.toFixed(1)}</div><div class="total-unit">Pa</div></div>
+      <div class="total-card"><div class="total-label">Milímetros de coluna de água</div><div class="total-value">${totalMmca.toFixed(2)}</div><div class="total-unit">mmca</div></div>
+    </div>
+  `;
+  row.appendChild(av);row.appendChild(bubble);log().appendChild(row);scroll();
+  setTimeout(()=>{setProgress(10);addBot('Queres fazer outro cálculo?');
+    addPills([{label:'Novo cálculo da instalação',action:()=>reiniciar()},{label:'Menu principal',action:()=>irMenu()}]);},500);
+}
+
+iniciarMenu();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(() => {
+    console.log('NCH AVAC PWA ready');
+  });
+}
+</script>
+</body>
+</html>
