@@ -154,6 +154,7 @@ function pedirCompartimento() {
       </div>
     </div>
     <div class="form-actions">
+      <button class="skip-btn" onclick="voltarMenuIncendio()">← Voltar</button>
       <button class="continuar-btn" onclick="criarCompartimento()">Criar compartimento →</button>
     </div>`;
 
@@ -337,12 +338,34 @@ function finalizarCompartimento() {
 
   // Perguntar se quer mais compartimentos
   setTimeout(() => {
-    addBot('Adicionar outro compartimento?');
+    addBot('O que pretende fazer?');
     addPills([
-      { label: 'Sim, novo compartimento', action: () => pedirCompartimento() },
-      { label: 'Não, ver resultado final', action: () => mostrarResultadoFinal() }
+      { label: 'Editar este compartimento', action: () => editarCompartimento() },
+      { label: 'Novo compartimento', action: () => pedirCompartimento() },
+      { label: 'Ver resultado final', action: () => mostrarResultadoFinal() }
     ]);
   }, 400);
+}
+
+function voltarMenuIncendio() {
+  if (incendioState.compartimentos.length > 0) {
+    addBot('O que pretende fazer?');
+    addPills([
+      { label: 'Ver resultado final', action: () => mostrarResultadoFinal() },
+      { label: '← Ferramentas', action: () => showToolMenu(currentArea) }
+    ]);
+  } else {
+    showToolMenu(currentArea);
+  }
+}
+
+function editarCompartimento() {
+  // Remover o último compartimento calculado (vamos recalcular)
+  incendioState.compartimentos.pop();
+  // Voltar ao formulário de actividades com os dados preservados
+  addUser('Editar compartimento');
+  setProgress(30);
+  setTimeout(() => pedirActividade(), 300);
 }
 
 function mostrarResultadoCompartimento(res) {
