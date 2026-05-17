@@ -133,6 +133,13 @@ function iniciarCargaIncendio() {
 function pedirCompartimento() {
   setProgress(10);
   incendioState.fase = 'nome_comp';
+  incendioState.currentComp = null;
+
+  // Desactivar formulários anteriores para evitar conflitos de IDs
+  document.querySelectorAll('.input-form').forEach(f => {
+    f.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+    f.style.opacity = '0.4';
+  });
 
   const row = document.createElement('div'); row.className = 'bot-row';
   const av = document.createElement('div'); av.className = 'bot-av'; av.innerHTML = AVATAR_SVG;
@@ -178,6 +185,12 @@ function criarCompartimento() {
 
 function pedirActividade() {
   incendioState.fase = 'actividade';
+
+  // Desactivar formulários anteriores
+  document.querySelectorAll('.input-form').forEach(f => {
+    f.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+    f.style.opacity = '0.4';
+  });
 
   const comp = incendioState.currentComp;
   const row = document.createElement('div'); row.className = 'bot-row';
