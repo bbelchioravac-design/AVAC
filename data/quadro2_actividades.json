@@ -1,0 +1,3026 @@
+[
+  {
+    "nome": "Acetileno, enchimento de garrafas",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Ácido carbónico",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Ácidos inorgânicos",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aço",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Açúcar",
+    "fab_qsi": 8400,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Açúcar, produtos de",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Acumuladores/Baterias",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Acumuladores/Baterias, expedição",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Adubos químicos",
+    "fab_qsi": 200,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Agulhas de aço",
+    "fab_qsi": 200,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Alcatrão",
+    "fab_qsi": 3400,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Alcatrão, produtos de",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Algodão em rama, guata",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Algodão, armazém de",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Alimentação, embalagem",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Alimentação, expedição",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Alimentação, matérias primas",
+    "arm_qvi": 3400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Alimentação, pratos pré-cozinhados",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Alumínio, produção de",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Alumínio, trabalho de",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Amido",
+    "fab_qsi": 2000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Aparelhos de rádio",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aparelhos de televisão",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aparelhos elétricos",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aparelhos elétricos, reparação",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Aparelhos eletrónicos",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aparelhos eletrónicos, reparação",
+    "fab_qsi": 500,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aparelhos fotográficos",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 600,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Aparelhos hospitalares/médicos, oficina",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aparelhos mecânicos",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aparelhos pequenos, construção de",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aparelhos, ensaios/experimentação de",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aparelhos, expedição de",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Aparelhos, oficinas de reparação",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Arame não revestido",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Arame revestido",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Armários frigoríficos",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 300,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Armas",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Armazém de retrosaria",
+    "arm_qvi": 1400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Armazéns de papelaria",
+    "arm_qvi": 1100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Armazéns de produtos farmacêuticos",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Arquivos",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Arquivos — restauro",
+    "arm_qvi": 4200,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Artigos de gesso",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos de metal",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos de metal fundidos por injeção",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, amolar/afiar",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, envernizamento",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, forjado",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, fresado",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, fundição",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, gravação",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, moldagem",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, revestimento a ouro",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, serralharia",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, soldadura",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, soldadura ligeira",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Artigos metálicos, sucatas",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Asfalto (bidons, blocos)",
+    "arm_qvi": 3400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Asfalto, manipulação de",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 3400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Automóveis, armazém de acessórios",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Automóveis, montagem",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Automóveis, peças",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Automóveis, pintura",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Automóveis, reparação",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Aviões",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Balanças",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Barcos de madeira",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Barcos de plástico",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Barcos metálicos",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Bebidas alcoólicas",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Bebidas sem álcool",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Bebidas sem álcool, expedição",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Betão, artigos de",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Betume de vidraceiros",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Bibliotecas",
+    "arm_qvi": 2000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Bibliotecas — restauro",
+    "arm_qvi": 2000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Bicicletas",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Borracha",
+    "fab_qsi": 28600,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Borracha, artigos de",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 5000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Borracha, goma elástica",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Borracha, goma elástica, artigos de",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 2100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Brinquedos",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Cabos",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 600,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Cabos, Cordame",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Cabos, Cordame, armazém de",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Cacau, produtos de",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 5800,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Café cru, sem refinar",
+    "arm_qvi": 2900,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Café, extrato",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 4500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Café, torrefação",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Caixas de madeira",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 600,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Caixas fortes",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Caixões/Urnas de madeira",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Calçado",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Calçado, acessórios para",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Calçado, expedição",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Cantaria",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Caramelos",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Caramelos, embalagem",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Carrinhos de bebé, cadeirinhas",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Carroçarias de automóveis",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Carroças, artigos para",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Cartão",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 4200,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Cartão betuminoso/asfáltico",
+    "fab_qsi": 2000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 2500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Cartão ondulado",
+    "fab_qsi": 800,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Cartão pedra",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Cartonagem",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 2500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Cartonagem, expedição",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Carvão de coke",
+    "arm_qvi": 10500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Celuloide",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 3400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Cera",
+    "arm_qvi": 3400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Cera, artigos de",
+    "fab_qsi": 1300,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 2100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Cerâmica, artigos de",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Cervejarias",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Cestaria",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Chapa, artigos de",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Chapa, embalagem de artigos",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Chapelarias",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Chocolate",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 3400,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Chocolate, embalagem",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Chocolate, fabricação, sala de moldes",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Cimento",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Colas combustíveis",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 3400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Colas incombustíveis",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Colchões não sintéticos",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 5000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Compressas/ligaduras",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Congelados",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Conservas",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Cordoarias",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 600,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Cores com diluentes combustíveis",
+    "fab_qsi": 4000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 2500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Cores e vernizes, misturas",
+    "fab_qsi": 2000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Correias",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Cortiça",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Cortiça, artigos de",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Cortinas em rolo",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Cosméticos",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 500,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Couro",
+    "fab_qsi": 1700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Couro sintético",
+    "fab_qsi": 1000,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1700,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Couro sintético, artigos de",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Couro sintético, corte de artigos de",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Couro, artigos de",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 600,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Couro, corte de artigos de",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Couro, venda de artigos de",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Crina, pelo/cerda de",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Depósitos mercadorias incombustíveis em caixas de madeira",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Depósitos mercadorias incombustíveis em caixas de plástico",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Depósitos mercadorias incombustíveis em estantes de madeira",
+    "arm_qvi": 100,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Depósitos mercadorias incombustíveis em estantes metálicas",
+    "arm_qvi": 20,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Depósitos mercadorias incombustíveis em classificadores",
+    "arm_qvi": 100,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Depósitos mercadorias incombustíveis em paletes de madeira",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Diluentes",
+    "fab_qsi": 3400,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Discos",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Drogarias",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Edifícios frigoríficos",
+    "arm_qvi": 2000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Eletricidade, armazém de materiais de",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Eletricidade, oficina de",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Eletrodomésticos",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Embalagem de material impresso",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Embalagem de mercadorias combustíveis",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Embalagem de mercadorias incombustíveis",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Embalagem de produtos alimentares",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Embalagem de têxteis",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Encadernação",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Envernizamento",
+    "fab_qsi": 80,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Envernizamento de móveis",
+    "fab_qsi": 200,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Envernizamento de papel",
+    "fab_qsi": 80,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Equipamento de frio",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 300,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Escovas e pincéis",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Esculturas de pedra",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Esferográficas",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Especiarias",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Espumas sintéticas",
+    "fab_qsi": 3000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 2500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Espumas sintéticas, artigos de",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Estampagem de produtos sintéticos/couro",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Estofos",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Estofos, artigos de",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Estufas, fogões, aquecedores a gás",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Expedição de artigos de cristal",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Expedição de artigos de folha-de-flandres",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Expedição de artigos impressos",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Expedição de artigos sintéticos",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Expedição de bebidas",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Expedição de cartonagem",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Expedição de ceras e vernizes",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Expedição de móveis",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Expedição de pequenos artigos de madeira",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Expedição de produtos alimentares",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Expedição de têxteis",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Fábrica de Cristal",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Farinha em sacos",
+    "arm_qvi": 2000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Farinha, fábrica ou comércio",
+    "fab_qsi": 1700,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 13000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Feltro",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Feltro, artigos de",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Feno, fardos de",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Ferramentas",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Fiação, cardados/cardagem",
+    "fab_qsi": 300,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Fiação, encanelado/bobinado",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Fiação, fiar/fiadura",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Fiação, produtos de fio",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Fiação, produtos de lã",
+    "arm_qvi": 1900,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Fiação, torcidos",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Fibras de coco",
+    "arm_qvi": 8400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Flores artificiais",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 200,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Folhas de lata",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Forjas",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Fornos",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Forragem",
+    "fab_qsi": 2000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 3300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Fósforos",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Fotografia, laboratórios",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Fotografia, oficinas, estúdios",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Fotografias, películas/filmes",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Fundição de metais",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Funiculares",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Galvanoplastia",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Gesso",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Giradiscos",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Gorduras",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 18000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Gorduras comestíveis",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 18900,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Gorduras comestíveis, expedição",
+    "fab_qsi": 900,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Gorduras líquidas comestíveis",
+    "fab_qsi": 900,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Gorduras líquidas comestíveis, expedição",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 18900,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Gorduras líquidas minerais/vegetais/animais",
+    "arm_qvi": 18900,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Grãos, sementes",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Guarda-chuvas",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Hidrogénio",
+    "arm_qvi": 130000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Imprensa, armazém",
+    "arm_qvi": 8000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Imprensa, embalagem",
+    "fab_qsi": 2000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Imprensa, expedição",
+    "fab_qsi": 200,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Imprensa, oficina tipográfica",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Imprensa, sala de máquinas",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Incineração de lixo",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Instaladores eletricistas",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Instaladores, oficinas",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Instrumentos de música",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Instrumentos de ótica",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Janelas de madeira",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Janelas de plástico",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Joias, fabricação",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Lã de madeira",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Lâmpadas fluorescentes",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Lâmpadas incandescentes",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Lapiseiras",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Latoaria",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Lavandaria",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Legumes frescos, venda",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Legumes secos, venda",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 400,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Leite condensado",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Leite em pó",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 9000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Lenha",
+    "arm_qvi": 2500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Levedura/fermento",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Licores",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Limpeza química, limpeza a seco",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Linóleo",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Locais de resíduos/refugos/desperdícios",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Lúpulo",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Luvas",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira em troncos",
+    "arm_qvi": 6300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Madeira, aparas",
+    "arm_qvi": 2100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Madeira, artigos de, carpintaria",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, artigos de, cunhagem",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, artigos de, embutidos",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, artigos de, entalhe",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, artigos de, envernizamento",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, artigos de, expedição",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, artigos de, impregnação",
+    "fab_qsi": 3000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Madeira, artigos de, marcenaria",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, artigos de, polimento",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Madeira, artigos de, secagem",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, artigos de, serragem/serração",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, artigos de, torneado",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Madeira, misturada ou variada",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 4200,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Madeira, restos de",
+    "arm_qvi": 2500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Madeira, vigas e tábuas",
+    "arm_qvi": 4200,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Malte",
+    "arm_qvi": 13400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Manteiga",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Máquinas",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Máquinas de coser",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Máquinas de escritório",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Máquinas de lavar roupa",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Marmelada",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Mármore, artigos de",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Massas alimentícias",
+    "fab_qsi": 1300,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Massas alimentícias, expedição",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Matadouros",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Materiais de construção, armazém",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Materiais e aparelhos para canalizações",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Materiais sintéticos",
+    "fab_qsi": 2000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 5900,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Materiais usados, tratamento",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 3400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Material de escritório",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Matérias sintéticas injetadas",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Matérias sintéticas, artigos de",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Matérias sintéticas, estampado",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Matérias sintéticas, expedição",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Matérias sintéticas, soldadura de peças",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Mecânica de precisão, oficina",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Medicamentos, embalagem",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Melaço",
+    "arm_qvi": 5000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Metais preciosos",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Metais, manufaturas em geral",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Metálicas, grandes construções",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Minerais",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Moldagem de matérias sintéticas",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Moldagem de metais",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Molduras",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Mostarda",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Motocicletas",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Motores elétricos",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Móveis de aço",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Móveis de madeira",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Móveis de madeira, envernizamento",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Móveis, carpintaria",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Móveis, estofados sem espuma sintética",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Negro de fumo, em sacos",
+    "arm_qvi": 12600,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Oficinas de chapa",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 2900,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Oficinas de correaria, selaria",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Oficinas de eletricidade",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Oficinas de mecânica",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Oficinas de pintura",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Oficinas de reparação",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Olaria",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Padarias industriais",
+    "fab_qsi": 1000,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Padarias, armazéns",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Padarias, laboratórios e fornos",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Painéis de cortiça",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Painéis de madeira",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Painéis de madeira aglomerada",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 6700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Paletes de madeira",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Palha prensada",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Palha, artigos de",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Palha, embalagens de",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Palhinha, para assentos",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Palitos",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Papel",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 10000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Papel, apresto/preparação",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Papel, resíduos prensados",
+    "arm_qvi": 2100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Papel, tratamento da madeira",
+    "fab_qsi": 80,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Papel, tratamento, fabricação",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Papel, velho ou a granel",
+    "arm_qvi": 8400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Parquets",
+    "fab_qsi": 2000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 1200,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Pastelarias com confeção",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Pedras artificiais",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Pedras de afiar, amolar",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Pedras preciosas, lapidação",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Pedras refratárias",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Pelaria, produtos de",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1200,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Peles, armazém",
+    "arm_qvi": 1200,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Películas/filmes, cópias",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Películas/filmes, oficinas de",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Perfumaria, artigos de",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 500,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Persianas, fabricação de",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 300,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Pilhas secas",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 600,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Pincéis",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Placas de fibras moles",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Placas de resina sintética",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Planadores",
+    "fab_qsi": 200,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Pneumáticos, pneus",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1800,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Pneumáticos, pneus de automóveis",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Porcelanas",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Portas de madeira",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1800,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Portas plásticas",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 4200,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Produtos de amianto",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Produtos de lavagem (lixívia)",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Produtos de lavagem (lixívia matéria prima)",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Produtos de reparação de calçado",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 2100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Produtos de talho, carnes",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Produtos farmacêuticos",
+    "fab_qsi": 200,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Produtos lácteos",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Produtos laminados exceto chapa e arame",
+    "fab_qsi": 100,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Produtos químicos combustíveis",
+    "fab_qsi": 300,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Queijos",
+    "fab_qsi": 100,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 2500,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Relógios",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Relógios, reparação de",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Resinas naturais",
+    "arm_qvi": 3300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Resinas sintéticas",
+    "fab_qsi": 3400,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 4200,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Resinas sintéticas, placas de",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 3400,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Revestimentos de chão combustíveis",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 6000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Rolamentos ou rolamentos de esferas",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Roupa, armários de madeira",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Roupa, armários metálicos",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Sabão",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 4200,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Sacos de juta",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Sacos de papel",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 12600,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Sacos de plástico",
+    "fab_qsi": 600,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 25200,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Salinas, produtos de",
+    "fab_qsi": 80,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Serração",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Serralharia",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Serviços de mesa, louças",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Skis",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Soda, óxido de sódio",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Subestação de transformação",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Sucata/ferro-velho",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Sumos de fruta",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 300,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Tabaco em bruto",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Tabaco, artigos de",
+    "fab_qsi": 200,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 2100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Talco",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Tapeçarias",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1700,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Tapeçarias, tinturaria",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Tecidos cânhamo, juta, linho",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Tecidos de ráfia",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Tecidos em geral, armazém",
+    "arm_qvi": 2000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Tecidos sintéticos",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Tecidos, depósito de fardos de algodão",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Tecidos, seda artificial",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Telefones",
+    "fab_qsi": 400,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 200,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Telhas, tijolos, cozedura",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Telhas, tijolos, fornos secagem estantes madeira",
+    "fab_qsi": 1000,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Telhas, tijolos, fornos secagem estantes metálicas",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Telhas, tijolos, prensagem",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Telhas, tijolos, preparação argila",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Telhas, tijolos, secagem estantes madeira",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Telhas, tijolos, secagem estantes metálicas",
+    "fab_qsi": 40,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Têxteis",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto"
+  },
+  {
+    "nome": "Têxteis, apresto/preparação",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1100,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Têxteis, artigos de",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, bordado",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Têxteis, branqueamento",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, calandragem",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, confeção",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Têxteis, corte",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, de juta",
+    "fab_qsi": 400,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Têxteis, de linho",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Têxteis, embalagem",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, entretelas",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Têxteis, estampagem",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, expedição",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, forros",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, mantas",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 1900,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Têxteis, preparação",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, rendas/bordados/aplicações",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, roupa de cama",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, roupa de vestir",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 400,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Têxteis, roupa interior",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 600,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, tecidos (fabricação)",
+    "fab_qsi": 300,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, tinturaria",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Têxteis, tricotado",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1300,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Tintas",
+    "fab_qsi": 200,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo"
+  },
+  {
+    "nome": "Tintas e Vernizes",
+    "fab_qsi": 800,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Tintas para impressão",
+    "fab_qsi": 700,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 3000,
+    "arm_rai": 2.0,
+    "arm_rai_label": "Alto"
+  },
+  {
+    "nome": "Tinturaria",
+    "fab_qsi": 500,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio"
+  },
+  {
+    "nome": "Toldos ou lonas",
+    "fab_qsi": 300,
+    "fab_rai": 1.0,
+    "fab_rai_label": "Baixo",
+    "arm_qvi": 1000,
+    "arm_rai": 1.0,
+    "arm_rai_label": "Baixo"
+  },
+  {
+    "nome": "Tonéis de madeira",
+    "fab_qsi": 1000,
+    "fab_rai": 2.0,
+    "fab_rai_label": "Alto",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  },
+  {
+    "nome": "Tonéis de plástico",
+    "fab_qsi": 600,
+    "fab_rai": 1.5,
+    "fab_rai_label": "Médio",
+    "arm_qvi": 800,
+    "arm_rai": 1.5,
+    "arm_rai_label": "Médio"
+  }
+]
