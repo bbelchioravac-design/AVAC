@@ -416,69 +416,83 @@ function mostrarResultadoFinal() {
   setProgress(100);
   const comps = incendioState.compartimentos;
 
-  if (comps.length === 1) {
-    addBot('Cálculo concluído. ✅');
-    projectLog.push({
-      tool: 'carga_incendio',
-      input: comps,
-      result: comps[0].resultado,
-      ts: new Date().toISOString()
-    });
-  } else {
-    // Calcular totalidade da UT
-    const sum_qs_S = comps.reduce((acc, c) => acc + c.resultado.qs * c.area, 0);
-    const sum_S = comps.reduce((acc, c) => acc + c.area, 0);
-    const q_total = sum_qs_S / sum_S;
+  // Calcular totalidade da UT
+  const sum_qs_S = comps.reduce((acc, c) => acc + c.resultado.qs * c.area, 0);
+  const sum_S = comps.reduce((acc, c) => acc + c.area, 0);
+  const q_total = sum_qs_S / sum_S;
 
-    const temArm = comps.some(c => c.resultado.temArmazenamento);
-    const q_class = temArm ? q_total / 10 : q_total;
-    const categoria = CATEGORIAS_RISCO.find(c => q_class <= c.max);
+  const temArm = comps.some(c => c.resultado.temArmazenamento);
+  const q_class = temArm ? q_total / 10 : q_total;
+  const categoria = CATEGORIAS_RISCO.find(c => q_class <= c.max);
 
-    const row = document.createElement('div'); row.className = 'bot-row';
-    const av = document.createElement('div'); av.className = 'bot-av'; av.innerHTML = AVATAR_SVG;
-    const bubble = document.createElement('div'); bubble.className = 'result-bubble';
-    const catClass = categoria.cat === '1ª' ? 'bok' : categoria.cat === '2ª' ? 'bwarn' : 'bbad';
+  const row = document.createElement('div'); row.className = 'bot-row';
+  const av = document.createElement('div'); av.className = 'bot-av'; av.innerHTML = AVATAR_SVG;
+  const bubble = document.createElement('div'); bubble.className = 'result-bubble';
+  const catClass = categoria.cat === '1ª' ? 'bok' : categoria.cat === '2ª' ? 'bwarn' : 'bbad';
 
-    bubble.innerHTML = `
-      <div class="rlabel">Totalidade da Utilização-Tipo</div>
+  // Tabela de compartimentos
+  const tabelaComps = `
+    <table class="res-table">
+      <thead>
+        <tr><th>Compartimento</th><th style="text-align:right">Área (m²)</th><th style="text-align:right">qs (MJ/m²)</th><th>Categoria</th></tr>
+      </thead>
+      <tbody>
+        ${comps.map(c => `
+          <tr>
+            <td>${c.resultado.nome}</td>
+            <td style="text-align:right">${c.area}</td>
+            <td style="text-align:right">${c.resultado.qs.toFixed(1)}</td>
+            <td><span class="badge ${c.resultado.categoria.cat === '1ª' ? 'bok' : c.resultado.categoria.cat === '2ª' ? 'bwarn' : 'bbad'}">${c.resultado.categoria.cat}</span></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`;
+
+  // Tabela detalhada por actividade
+  const tabelaDetalhe = comps.map(c => `
+    <div style="margin-top:12px;">
+      <div class="rlabel">${c.resultado.nome} — ${c.area} m²</div>
       <table class="res-table">
-        <thead>
-          <tr><th>Compartimento</th><th style="text-align:right">Área (m²)</th><th style="text-align:right">qs (MJ/m²)</th><th>Categoria</th></tr>
-        </thead>
+        <thead><tr><th>Actividade</th><th>Modo</th><th style="text-align:right">qs parcial</th></tr></thead>
         <tbody>
-          ${comps.map(c => `
+          ${c.resultado.linhas.map(l => `
             <tr>
-              <td>${c.resultado.nome}</td>
-              <td style="text-align:right">${c.area}</td>
-              <td style="text-align:right">${c.resultado.qs.toFixed(1)}</td>
-              <td><span class="badge ${c.resultado.categoria.cat === '1ª' ? 'bok' : c.resultado.categoria.cat === '2ª' ? 'bwarn' : 'bbad'}">${c.resultado.categoria.cat}</span></td>
+              <td>${l.nome}</td>
+              <td>${l.modo}</td>
+              <td style="text-align:right">${l.contribuicao.toFixed(1)} MJ/m²</td>
             </tr>
           `).join('')}
         </tbody>
       </table>
-      <div class="total-row">
-        <div class="total-card">
-          <div class="total-label">qs global da UT</div>
-          <div class="total-value">${q_total.toFixed(1)}</div>
-          <div class="total-unit">MJ/m²${temArm ? ' (÷10 = ' + q_class.toFixed(1) + ' MJ/m²)' : ''} · Área total: ${sum_S.toFixed(1)} m²</div>
-        </div>
-        <div class="total-card">
-          <div class="total-label">Categoria de risco global</div>
-          <div class="total-value"><span class="badge ${catClass}">${categoria.cat} Categoria</span></div>
-          <div class="total-unit">${categoria.nivel}</div>
-        </div>
-      </div>`;
+    </div>
+  `).join('');
 
-    row.appendChild(av); row.appendChild(bubble);
-    logEl().appendChild(row); scroll();
+  bubble.innerHTML = `
+    <div class="rlabel">Resultado Final — ${comps.length === 1 ? '1 compartimento' : comps.length + ' compartimentos'}</div>
+    ${tabelaComps}
+    <div class="total-row">
+      <div class="total-card">
+        <div class="total-label">qs ${comps.length > 1 ? 'global da UT' : 'do compartimento'}</div>
+        <div class="total-value">${q_total.toFixed(1)}</div>
+        <div class="total-unit">MJ/m²${temArm ? ' (÷10 = ' + q_class.toFixed(1) + ' MJ/m²)' : ''} · Área total: ${sum_S.toFixed(1)} m²</div>
+      </div>
+      <div class="total-card">
+        <div class="total-label">Categoria de risco</div>
+        <div class="total-value"><span class="badge ${catClass}">${categoria.cat} Categoria</span></div>
+        <div class="total-unit">${categoria.nivel}</div>
+      </div>
+    </div>
+    ${tabelaDetalhe}`;
 
-    projectLog.push({
-      tool: 'carga_incendio',
-      input: comps,
-      result: { q_total, q_class, categoria, compartimentos: comps.map(c => c.resultado) },
-      ts: new Date().toISOString()
-    });
-  }
+  row.appendChild(av); row.appendChild(bubble);
+  logEl().appendChild(row); scroll();
+
+  projectLog.push({
+    tool: 'carga_incendio',
+    input: comps,
+    result: { q_total, q_class, categoria, compartimentos: comps.map(c => c.resultado) },
+    ts: new Date().toISOString()
+  });
 
   setTimeout(() => {
     setProgress(10);
