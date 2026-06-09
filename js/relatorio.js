@@ -381,7 +381,6 @@ async function gerarRelatorioWord() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    addBot('✅ Relatório gerado com sucesso!');
   } catch (e) {
     console.error('Erro ao gerar relatório:', e);
     alert('Erro ao gerar o relatório. Verifique a consola para mais detalhes.');
