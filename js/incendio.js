@@ -680,10 +680,14 @@ function mostrarResultadoFinal() {
   setTimeout(() => {
     setProgress(10);
     addBot('Novo cálculo?');
-    addPills([
+    const pills = [
       { label: 'Novo cálculo', action: iniciarCargaIncendio },
       { label: '← Ferramentas', action: () => showToolMenu(currentArea) },
       { label: '← Áreas', action: showAreaMenu }
-    ]);
+    ];
+    if (currentProject) {
+      pills.unshift({ label: '📄 Gerar Relatório', action: gerarRelatorioWord });
+    }
+    addPills(pills);
   }, 500);
 }
