@@ -9,7 +9,7 @@ const RECT_DIMS = []; for (let v = 100; v <= 1200; v += 50) RECT_DIMS.push(v);
 const RHO = 1.2;
 
 // ─── State AVAC ───
-let estadoA = { fase: 0, modoCalc: null, caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null }, currentFilterForm: null };
+let estadoA = { fase: 0, modoCalc: null, unidade: 'mmca', caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null }, currentFilterForm: null };
 let dadosB = { trocos: [], sing90: [], sing45: [], singT: [], fixas: [] };
 
 // ─── Math helpers ───
@@ -44,16 +44,19 @@ function iniciarModoA() {
   modo = 'a';
   setupChat(); setProgress(10); setSub('AVAC — Dimensionamento de condutas');
   setHeaderBtns([{ label: '← Ferramentas', action: () => showToolMenu(currentArea) }, { label: 'Novo', primary: true, action: iniciarModoA }]);
-  estadoA = { fase: 0, modoCalc: null, caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null }, currentFilterForm: null };
+  estadoA = { fase: 0, modoCalc: null, unidade: 'mmca', caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null }, currentFilterForm: null };
   addBot('Seleccione o método de dimensionamento.');
   addPills([
-    { label: 'Por perda de carga (mmca/m)', action: () => escolherModoA('ped') },
-    { label: 'Por velocidade (m/s)', action: () => escolherModoA('vel') }
+    { label: 'PED (mmca/m)', action: () => escolherModoA('ped', 'mmca') },
+    { label: 'PED (Pa/m)', action: () => escolherModoA('ped', 'pa') },
+    { label: 'Velocidade (m/s)', action: () => escolherModoA('vel', 'mmca') }
   ]);
 }
 
-function escolherModoA(m) {
-  estadoA.modoCalc = m; setProgress(25);
+function escolherModoA(m, unidade) {
+  estadoA.modoCalc = m;
+  estadoA.unidade = unidade;
+  setProgress(25);
   addBot('Que tipo de conduta pretende?');
   addPills([
     { label: 'Circular', action: () => escolherSecaoA('circ') },
@@ -66,7 +69,6 @@ function escolherSecaoA(tipo) {
   estadoA.tipoSecao = tipo;
 
   if (tipo === 'rect') {
-    // Mostrar formulário de filtros rectangulares
     setProgress(30);
     addBot('Defina os limites para a conduta rectangular (opcional).');
     const row = document.createElement('div'); row.className = 'bot-row';
@@ -83,14 +85,13 @@ function escolherSecaoA(tipo) {
           <input type="number" id="rect-larg-max" placeholder="ex: 600 (vazio = sem limite)" min="100" step="50"/>
         </div>
       </div>
-      <div style="font-size:11px;color:#5a7aaa;margin:4px 0 8px;">Estes limites aplicam-se a todos os cálculos desta sessão.</div>
+      <div style="font-size:11px;color:#5a7aaa;margin:4px 0 8px;">Estes limites aplicam-se a todos os cálculos desta sessão. A conduta é rodada para encaixar.</div>
       <div class="form-actions">
         <button class="continuar-btn" onclick="definirFiltrosRect()">Continuar →</button>
       </div>`;
     estadoA.currentFilterForm = form;
     row.appendChild(av); row.appendChild(form); logEl().appendChild(row); scroll();
   } else {
-    // Circular ou ambos → directo para caudal
     pedirCaudalA();
   }
 }
@@ -102,7 +103,6 @@ function definirFiltrosRect() {
   estadoA.filtroRect.alturaMax = altVal ? parseInt(altVal) : null;
   estadoA.filtroRect.larguraMax = largVal ? parseInt(largVal) : null;
 
-  // Feedback sobre filtros
   const filtros = [];
   if (estadoA.filtroRect.alturaMax) filtros.push(`altura ≤ ${estadoA.filtroRect.alturaMax} mm`);
   if (estadoA.filtroRect.larguraMax) filtros.push(`largura ≤ ${estadoA.filtroRect.larguraMax} mm`);
@@ -127,19 +127,29 @@ function enviarA(val) {
   addUser(val);
   if (estadoA.fase === 1) {
     estadoA.caudal = num; estadoA.fase = 2; setProgress(65);
-    if (estadoA.modoCalc === 'ped') { addBot('Qual a <strong>perda de carga</strong> em mmca/m?'); enableInput('PED em mmca/m...'); }
-    else { addBot('Qual a <strong>velocidade</strong> em m/s?'); enableInput('Velocidade em m/s...'); }
+    if (estadoA.modoCalc === 'ped') {
+      const unLabel = estadoA.unidade === 'pa' ? 'Pa/m' : 'mmca/m';
+      addBot(`Qual a <strong>perda de carga</strong> em ${unLabel}?`);
+      enableInput(`PED em ${unLabel}...`);
+    } else {
+      addBot('Qual a <strong>velocidade</strong> em m/s?');
+      enableInput('Velocidade em m/s...');
+    }
   } else if (estadoA.fase === 2) {
     setProgress(100);
     const res = calcularA(estadoA.caudal, num, estadoA.modoCalc);
-    projectLog.push({ tool: 'dim_condutas', input: { caudal: estadoA.caudal, param: num, modo: estadoA.modoCalc, tipoSecao: estadoA.tipoSecao, filtroRect: { ...estadoA.filtroRect } }, result: res, ts: new Date().toISOString() });
+    projectLog.push({
+      tool: 'dim_condutas',
+      input: { caudal: estadoA.caudal, param: num, modo: estadoA.modoCalc, unidade: estadoA.unidade, tipoSecao: estadoA.tipoSecao, filtroRect: { ...estadoA.filtroRect } },
+      result: res, ts: new Date().toISOString()
+    });
     saveProject();
     addResultA(res);
     estadoA.fase = 1; estadoA.caudal = null;
     setTimeout(() => {
       setProgress(20);
       addBot('Novo cálculo?');
-      addPills([
+      const pills = [
         { label: 'Sim, mesma secção', action: () => pedirCaudalA() },
         { label: 'Mudar secção', action: () => {
           addBot('Que tipo de conduta pretende?');
@@ -151,15 +161,23 @@ function enviarA(val) {
         }},
         { label: 'Mudar método', action: iniciarModoA },
         { label: '← Ferramentas', action: () => showToolMenu(currentArea) }
-      ]);
+      ];
+      if (currentProject) {
+        pills.unshift({ label: '📄 Juntar ao relatório', action: () => juntarAoRelatorio() });
+      }
+      addPills(pills);
     }, 400);
   }
 }
 
 function calcularA(Q_h, param, mc) {
   const Q = Q_h / 3600, lambda = 0.02; let D_calc_m;
-  if (mc === 'ped') { const dPm_Pa = param * 9.81; D_calc_m = Math.pow((lambda * RHO * Q * Q * 8) / (Math.PI * Math.PI * dPm_Pa), 1 / 5); }
-  else D_calc_m = Math.sqrt(4 * Q / (Math.PI * param));
+  if (mc === 'ped') {
+    const dPm_Pa = estadoA.unidade === 'pa' ? param : param * 9.81;
+    D_calc_m = Math.pow((lambda * RHO * Q * Q * 8) / (Math.PI * Math.PI * dPm_Pa), 1 / 5);
+  } else {
+    D_calc_m = Math.sqrt(4 * Q / (Math.PI * param));
+  }
   const D_calc_mm = D_calc_m * 1000;
   const D_norm = DN.reduce((p, c) => Math.abs(c - D_calc_mm) < Math.abs(p - D_calc_mm) ? c : p);
   const D_norm_m = D_norm / 1000, A = Math.PI * D_norm_m * D_norm_m / 4, v_real = Q / A;
@@ -170,12 +188,22 @@ function calcularA(Q_h, param, mc) {
 function calcRects(D_norm) {
   const dims = [];
   const filtro = estadoA.filtroRect;
+
+  // Determinar limites reais (a conduta pode ser rodada para encaixar)
+  let limMenor = null, limMaior = null;
+  if (filtro.alturaMax && filtro.larguraMax) {
+    limMenor = Math.min(filtro.alturaMax, filtro.larguraMax);
+    limMaior = Math.max(filtro.alturaMax, filtro.larguraMax);
+  } else if (filtro.alturaMax) {
+    limMenor = filtro.alturaMax;
+  } else if (filtro.larguraMax) {
+    limMenor = filtro.larguraMax;
+  }
+
   for (let a = 100; a <= 1200; a += 50) {
-    if (filtro.larguraMax && a > filtro.larguraMax) continue;
+    if (limMaior && a > limMaior) continue;
     for (let b = 100; b <= a; b += 50) {
-      // b é sempre a dimensão menor (b <= a)
-      // alturaMax limita a menor dimensão (altura da conduta)
-      if (filtro.alturaMax && b > filtro.alturaMax) continue;
+      if (limMenor && b > limMenor) continue;
       const deq = deqHuebscher(a, b);
       dims.push({ a, b, deq, diff: Math.abs(deq - D_norm), ratio: a / b });
     }
@@ -195,6 +223,11 @@ function addResultA(r) {
   const av = document.createElement('div'); av.className = 'bot-av'; av.innerHTML = AVATAR_SVG;
   const bubble = document.createElement('div'); bubble.className = 'result-bubble';
   const tipo = estadoA.tipoSecao;
+  const isPa = estadoA.unidade === 'pa';
+
+  // Perda linear formatada segundo unidade escolhida
+  const pedPrimario = isPa ? `${r.dPm_Pa.toFixed(2)} Pa/m` : `${r.dPm_mmca.toFixed(3)} mmca/m`;
+  const pedSecundario = isPa ? `${r.dPm_mmca.toFixed(3)} mmca/m` : `${r.dPm_Pa.toFixed(2)} Pa/m`;
 
   // Circular
   let htmlCirc = '';
@@ -204,7 +237,7 @@ function addResultA(r) {
       <div class="metrics">
         <div class="mc"><div class="ml">Diâmetro norm.</div><div class="mv">Ø ${r.D_norm}</div><div class="mu">mm (calc: ${Math.round(r.D_calc_mm)} mm)</div></div>
         <div class="mc"><div class="ml">Velocidade real</div><div class="mv">${r.v_real.toFixed(2)}</div><div class="mu">m/s</div></div>
-        <div class="mc"><div class="ml">Perda linear</div><div class="mv">${r.dPm_Pa.toFixed(2)}</div><div class="mu">Pa/m · ${r.dPm_mmca.toFixed(3)} mmca/m</div></div>
+        <div class="mc"><div class="ml">Perda linear</div><div class="mv">${pedPrimario}</div><div class="mu">${pedSecundario}</div></div>
       </div>`;
   }
 
@@ -223,13 +256,11 @@ function addResultA(r) {
       htmlRect += r.rects.map(rc => {
         const areaR = (rc.a / 1000) * (rc.b / 1000);
         const vRect = Q_m3s / areaR;
-        // Badge: considerar rácio E velocidade
         let badgeClass, badgeLabel;
         if (rc.ratio <= 4 && vRect <= 6) { badgeClass = 'bok'; badgeLabel = 'recomendado'; }
         else if (rc.ratio <= 8 && vRect <= 8) { badgeClass = 'bwarn'; badgeLabel = 'aceitável'; }
         else { badgeClass = 'bbad'; badgeLabel = 'evitar'; }
-        const velInfo = ` · v=${vRect.toFixed(2)} m/s`;
-        return `<div class="rect-row"><div class="rdims">${rc.a} × ${rc.b} mm</div><div class="rratio">rácio ${rc.ratio.toFixed(1)}:1 · Deq ${Math.round(rc.deq)} mm${velInfo}</div><span class="badge ${badgeClass}">${badgeLabel}</span></div>`;
+        return `<div class="rect-row"><div class="rdims">${rc.a} × ${rc.b} mm</div><div class="rratio">rácio ${rc.ratio.toFixed(1)}:1 · Deq ${Math.round(rc.deq)} mm · v=${vRect.toFixed(2)} m/s</div><span class="badge ${badgeClass}">${badgeLabel}</span></div>`;
       }).join('');
     } else {
       htmlRect += `<div class="rlabel" style="color:#f59e0b;">Sem condutas rectangulares dentro dos limites definidos</div>`;
@@ -439,10 +470,14 @@ function calcularTotal() {
   row.appendChild(av); row.appendChild(bubble); logEl().appendChild(row); scroll();
   setTimeout(() => {
     setProgress(10); addBot('Novo cálculo?');
-    addPills([
+    const pills = [
       { label: 'Novo cálculo PED', action: iniciarModoB },
       { label: '← Ferramentas', action: () => showToolMenu(currentArea) },
       { label: '← Áreas', action: showAreaMenu }
-    ]);
+    ];
+    if (currentProject) {
+      pills.unshift({ label: '📄 Juntar ao relatório', action: () => juntarAoRelatorio() });
+    }
+    addPills(pills);
   }, 500);
 }

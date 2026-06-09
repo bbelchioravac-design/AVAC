@@ -192,6 +192,110 @@ function enterApp() {
 }
 
 // ─── Projecto: UI ───
+
+// ─── Relatório: marcar cálculos ───
+function juntarAoRelatorio() {
+  const lastIdx = projectLog.length - 1;
+  if (lastIdx >= 0 && !projectLog[lastIdx].incluirRelatorio) {
+    projectLog[lastIdx].incluirRelatorio = true;
+    saveProject();
+    addBot('✓ Cálculo adicionado ao relatório.');
+  } else if (lastIdx >= 0) {
+    addBot('Este cálculo já está no relatório.');
+  }
+}
+
+// ─── Export Excel ───
+function exportarExcel() {
+  if (typeof XLSX === 'undefined') {
+    alert('A carregar biblioteca Excel. Tente novamente em alguns segundos.');
+    return;
+  }
+  const marcados = projectLog.filter(l => l.incluirRelatorio);
+  if (marcados.length === 0) { alert('Nenhum cálculo marcado para o relatório.\nUse "Juntar ao relatório" após cada cálculo.'); return; }
+
+  const wb = XLSX.utils.book_new();
+
+  // Sheet: Dimensionamento de condutas
+  const condutas = marcados.filter(l => l.tool === 'dim_condutas');
+  if (condutas.length > 0) {
+    const data = condutas.map(l => {
+      const row = {
+        'Caudal (m³/h)': l.input.caudal,
+        'Método': l.input.modo === 'ped' ? 'PED' : 'Velocidade',
+        'Parâmetro': l.input.param,
+        'Unidade': l.input.unidade === 'pa' ? 'Pa/m' : 'mmca/m',
+        'DN (mm)': l.result.D_norm,
+        'Velocidade (m/s)': Math.round(l.result.v_real * 100) / 100,
+        'PED (Pa/m)': Math.round(l.result.dPm_Pa * 100) / 100,
+        'PED (mmca/m)': Math.round(l.result.dPm_mmca * 1000) / 1000,
+      };
+      l.result.rects.forEach((rc, i) => {
+        row[`Rect ${i + 1}`] = `${rc.a}×${rc.b}`;
+      });
+      return row;
+    });
+    const ws = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, 'Condutas');
+  }
+
+  // Sheet: PED instalação
+  const ped = marcados.filter(l => l.tool === 'ped_instalacao');
+  if (ped.length > 0) {
+    const data = [];
+    ped.forEach((l, idx) => {
+      l.result.linhas.forEach(linha => {
+        data.push({
+          'Cálculo': idx + 1,
+          'Elemento': linha.desc,
+          'Perda (Pa)': Math.round(linha.pa * 10) / 10,
+          'Perda (mmca)': Math.round(linha.pa / 9.81 * 100) / 100,
+        });
+      });
+      data.push({
+        'Cálculo': idx + 1,
+        'Elemento': 'TOTAL',
+        'Perda (Pa)': Math.round(l.result.totalPa * 10) / 10,
+        'Perda (mmca)': Math.round(l.result.totalMmca * 100) / 100,
+      });
+    });
+    const ws = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, 'PED Instalação');
+  }
+
+  // Sheet: Carga de incêndio
+  const incendio = marcados.filter(l => l.tool === 'carga_incendio');
+  if (incendio.length > 0) {
+    const data = [];
+    incendio.forEach((l, idx) => {
+      l.result.compartimentos.forEach(c => {
+        c.linhas.forEach(linha => {
+          data.push({
+            'Cálculo': idx + 1,
+            'Compartimento': c.nome,
+            'Área (m²)': c.area,
+            'Actividade': linha.nome,
+            'Modo': linha.modo,
+            'qs parcial (MJ/m²)': Math.round(linha.contribuicao * 10) / 10,
+          });
+        });
+        data.push({
+          'Cálculo': idx + 1,
+          'Compartimento': c.nome,
+          'Área (m²)': c.area,
+          'Actividade': 'TOTAL',
+          'Modo': '',
+          'qs parcial (MJ/m²)': Math.round(c.qs * 10) / 10,
+        });
+      });
+    });
+    const ws = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, 'Carga Incêndio');
+  }
+
+  const nomeFile = currentProject ? currentProject.nome.replace(/[^a-zA-Z0-9À-ÿ\s-]/g, '').trim() : 'ALIOS_Calculos';
+  XLSX.writeFile(wb, `${nomeFile} - Cálculos.xlsx`);
+}
 function injectProjectCSS() {
   if (document.getElementById('project-css')) return;
   const style = document.createElement('style');
@@ -280,7 +384,9 @@ function renderProjectCard() {
         ${currentProject.morada ? `<span class="project-info-label">Morada:</span><span class="project-info-value">${currentProject.morada}</span>` : ''}
         ${currentProject.requerente ? `<span class="project-info-label">Requerente:</span><span class="project-info-value">${currentProject.requerente}</span>` : ''}
       </div>
-      ${nCalc > 0 ? `<div class="project-log-count">✓ ${nCalc} cálculo${nCalc !== 1 ? 's' : ''} registado${nCalc !== 1 ? 's' : ''}</div>` : ''}`;
+      ${nCalc > 0 ? `<div class="project-log-count">✓ ${nCalc} cálculo${nCalc !== 1 ? 's' : ''} registado${nCalc !== 1 ? 's' : ''}${projectLog.filter(l=>l.incluirRelatorio).length > 0 ? `
+        <button style="background:#10b981;border:none;color:#fff;padding:4px 12px;border-radius:4px;font-size:12px;cursor:pointer;margin-left:8px;font-weight:500;" onclick="exportarExcel()">📊 Exportar Excel</button>` : ''}
+      </div>` : ''}`;
   } else {
     card.innerHTML = `
       <div class="project-card-header">

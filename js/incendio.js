@@ -686,7 +686,8 @@ function mostrarResultadoFinal() {
       { label: '← Áreas', action: showAreaMenu }
     ];
     if (currentProject) {
-      pills.unshift({ label: '📄 Gerar Relatório', action: gerarRelatorioWord });
+      pills.unshift({ label: '📄 Gerar Relatório Word', action: gerarRelatorioWord });
+      pills.unshift({ label: '📋 Juntar ao relatório', action: () => juntarAoRelatorio() });
     }
     addPills(pills);
   }, 500);
