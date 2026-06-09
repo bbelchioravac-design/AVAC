@@ -341,6 +341,9 @@ function pedirActividade() {
   form.innerHTML = `
     <div style="font-size:13px;color:#d0d6e8;margin-bottom:10px;">
       <strong>${comp.nome}</strong> — Adicionar actividade
+      <div id="inc-area-status" style="font-size:12px;margin-top:4px;color:#10b981;">
+        Área disponível: ${comp.area.toFixed(1)} / ${comp.area.toFixed(1)} m²
+      </div>
     </div>
     <div class="form-row">
       <div class="form-field" style="flex:3">
@@ -416,6 +419,14 @@ function adicionarActividade() {
   if (!sel) { alert('Seleccione uma actividade.'); return; }
   if (!area || area <= 0) { alert('Indique a área.'); return; }
 
+  // Validar que não excede a área do compartimento
+  const areaUsada = incendioState.currentComp.actividades.reduce((s, a) => s + a.area, 0);
+  const areaDisponivel = incendioState.currentComp.area - areaUsada;
+  if (area > areaDisponivel + 0.01) {
+    alert(`Área excede o compartimento.\nÁrea total: ${incendioState.currentComp.area} m²\nJá ocupada: ${areaUsada.toFixed(1)} m²\nDisponível: ${areaDisponivel.toFixed(1)} m²`);
+    return;
+  }
+
   const isArm = sel.startsWith('arm_');
   const idx = parseInt(sel.split('_')[1]);
   const act = QUADRO2[idx];
@@ -467,7 +478,26 @@ function renderActividadesList() {
     d.innerHTML = `<span>${desc}</span><button class="del-btn" onclick="removerActividade(${i})">✕</button>`;
     list.appendChild(d);
   });
+  updateAreaStatus();
   scroll();
+}
+
+function updateAreaStatus() {
+  const f = incendioState.currentForm;
+  if (!f) return;
+  const status = f.querySelector('#inc-area-status');
+  if (!status) return;
+  const comp = incendioState.currentComp;
+  const areaUsada = comp.actividades.reduce((s, a) => s + a.area, 0);
+  const disponivel = comp.area - areaUsada;
+  status.textContent = `Área disponível: ${disponivel.toFixed(1)} / ${comp.area.toFixed(1)} m²`;
+  if (disponivel <= 0) {
+    status.style.color = '#ef4444';
+  } else if (disponivel < comp.area * 0.2) {
+    status.style.color = '#f59e0b';
+  } else {
+    status.style.color = '#10b981';
+  }
 }
 
 function removerActividade(idx) {
