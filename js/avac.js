@@ -138,7 +138,15 @@ function enviarA(val) {
       setProgress(20);
       addBot('Novo cálculo?');
       addPills([
-        { label: 'Sim, mesmo método', action: () => pedirCaudalA() },
+        { label: 'Sim, mesma secção', action: () => pedirCaudalA() },
+        { label: 'Mudar secção', action: () => {
+          addBot('Que tipo de conduta pretende?');
+          addPills([
+            { label: 'Circular', action: () => escolherSecaoA('circ') },
+            { label: 'Rectangular', action: () => escolherSecaoA('rect') },
+            { label: 'Deixa-me escolher', action: () => escolherSecaoA('ambos') }
+          ]);
+        }},
         { label: 'Mudar método', action: iniciarModoA },
         { label: '← Ferramentas', action: () => showToolMenu(currentArea) }
       ]);
@@ -213,8 +221,13 @@ function addResultA(r) {
       htmlRect += r.rects.map(rc => {
         const areaR = (rc.a / 1000) * (rc.b / 1000);
         const vRect = Q_m3s / areaR;
-        const velInfo = tipo === 'rect' ? ` · v=${vRect.toFixed(2)} m/s` : '';
-        return `<div class="rect-row"><div class="rdims">${rc.a} × ${rc.b} mm</div><div class="rratio">rácio ${rc.ratio.toFixed(1)}:1 · Deq ${Math.round(rc.deq)} mm${velInfo}</div><span class="badge ${rc.ratio <= 4 ? 'bok' : rc.ratio <= 8 ? 'bwarn' : 'bbad'}">${rc.ratio <= 4 ? 'recomendado' : rc.ratio <= 8 ? 'aceitável' : 'evitar'}</span></div>`;
+        // Badge: considerar rácio E velocidade
+        let badgeClass, badgeLabel;
+        if (rc.ratio <= 4 && vRect <= 6) { badgeClass = 'bok'; badgeLabel = 'recomendado'; }
+        else if (rc.ratio <= 8 && vRect <= 8) { badgeClass = 'bwarn'; badgeLabel = 'aceitável'; }
+        else { badgeClass = 'bbad'; badgeLabel = 'evitar'; }
+        const velInfo = ` · v=${vRect.toFixed(2)} m/s`;
+        return `<div class="rect-row"><div class="rdims">${rc.a} × ${rc.b} mm</div><div class="rratio">rácio ${rc.ratio.toFixed(1)}:1 · Deq ${Math.round(rc.deq)} mm${velInfo}</div><span class="badge ${badgeClass}">${badgeLabel}</span></div>`;
       }).join('');
     } else {
       htmlRect += `<div class="rlabel" style="color:#f59e0b;">Sem condutas rectangulares dentro dos limites definidos</div>`;
