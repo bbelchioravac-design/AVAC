@@ -384,9 +384,7 @@ function renderProjectCard() {
         ${currentProject.morada ? `<span class="project-info-label">Morada:</span><span class="project-info-value">${currentProject.morada}</span>` : ''}
         ${currentProject.requerente ? `<span class="project-info-label">Requerente:</span><span class="project-info-value">${currentProject.requerente}</span>` : ''}
       </div>
-      ${nCalc > 0 ? `<div class="project-log-count">✓ ${nCalc} cálculo${nCalc !== 1 ? 's' : ''} registado${nCalc !== 1 ? 's' : ''}${projectLog.filter(l=>l.incluirRelatorio).length > 0 ? `
-        <button style="background:#10b981;border:none;color:#fff;padding:4px 12px;border-radius:4px;font-size:12px;cursor:pointer;margin-left:8px;font-weight:500;" onclick="exportarExcel()">📊 Exportar Excel</button>` : ''}
-      </div>` : ''}`;
+      ${nCalc > 0 ? `<div class="project-log-count">✓ ${nCalc} cálculo${nCalc !== 1 ? 's' : ''} registado${nCalc !== 1 ? 's' : ''}</div>` : ''}`;
   } else {
     card.innerHTML = `
       <div class="project-card-header">

@@ -163,9 +163,26 @@ function enviarA(val) {
         { label: '← Ferramentas', action: () => showToolMenu(currentArea) }
       ];
       if (currentProject) {
+        if (projectLog.some(l => l.incluirRelatorio)) {
+          pillsNav.unshift({ label: '📊 Exportar Excel', action: exportarExcel });
+        }
         pillsNav.unshift({ label: '📄 Juntar ao relatório', action: () => {
           juntarAoRelatorio();
-          addPills(pillsNav.filter(p => !p.label.includes('Juntar')));
+          const restPills = [
+            { label: 'Sim, mesma secção', action: () => pedirCaudalA() },
+            { label: 'Mudar secção', action: () => {
+              addBot('Que tipo de conduta pretende?');
+              addPills([
+                { label: 'Circular', action: () => escolherSecaoA('circ') },
+                { label: 'Rectangular', action: () => escolherSecaoA('rect') },
+                { label: 'Deixa-me escolher', action: () => escolherSecaoA('ambos') }
+              ]);
+            }},
+            { label: 'Mudar método', action: iniciarModoA },
+            { label: '← Ferramentas', action: () => showToolMenu(currentArea) }
+          ];
+          restPills.unshift({ label: '📊 Exportar Excel', action: exportarExcel });
+          addPills(restPills);
         }});
       }
       addPills(pillsNav);
@@ -479,9 +496,18 @@ function calcularTotal() {
       { label: '← Áreas', action: showAreaMenu }
     ];
     if (currentProject) {
+      if (projectLog.some(l => l.incluirRelatorio)) {
+        pillsNavB.unshift({ label: '📊 Exportar Excel', action: exportarExcel });
+      }
       pillsNavB.unshift({ label: '📄 Juntar ao relatório', action: () => {
         juntarAoRelatorio();
-        addPills(pillsNavB.filter(p => !p.label.includes('Juntar')));
+        const restPills = [
+          { label: 'Novo cálculo PED', action: iniciarModoB },
+          { label: '← Ferramentas', action: () => showToolMenu(currentArea) },
+          { label: '← Áreas', action: showAreaMenu }
+        ];
+        restPills.unshift({ label: '📊 Exportar Excel', action: exportarExcel });
+        addPills(restPills);
       }});
     }
     addPills(pillsNavB);
