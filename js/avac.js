@@ -161,13 +161,11 @@ function calcRects(D_norm) {
   const dims = [];
   const filtro = estadoA.filtroRect;
   for (let a = 100; a <= 1200; a += 50) {
-    // Aplicar filtro de largura máxima
     if (filtro.larguraMax && a > filtro.larguraMax) continue;
     for (let b = 100; b <= a; b += 50) {
-      // Aplicar filtro de altura máxima (b é a dimensão menor)
+      // b é sempre a dimensão menor (b <= a)
+      // alturaMax limita a menor dimensão (altura da conduta)
       if (filtro.alturaMax && b > filtro.alturaMax) continue;
-      // Verificar também o inverso: se alturaMax limita a, ou larguraMax limita b
-      if (filtro.alturaMax && a > filtro.alturaMax && b > filtro.alturaMax) continue;
       const deq = deqHuebscher(a, b);
       dims.push({ a, b, deq, diff: Math.abs(deq - D_norm), ratio: a / b });
     }
@@ -175,11 +173,6 @@ function calcRects(D_norm) {
   dims.sort((x, y) => x.diff - y.diff);
   const out = [], seen = new Set();
   for (const d of dims) {
-    // Garantir que os filtros são respeitados em ambas as orientações
-    const dimMenor = Math.min(d.a, d.b);
-    const dimMaior = Math.max(d.a, d.b);
-    if (filtro.alturaMax && dimMenor > filtro.alturaMax) continue;
-    if (filtro.larguraMax && dimMaior > filtro.larguraMax) continue;
     const k = `${d.a}x${d.b}`;
     if (!seen.has(k) && out.length < 5) { seen.add(k); out.push(d); }
     if (out.length >= 5) break;
@@ -214,22 +207,15 @@ function addResultA(r) {
     if (filtro.larguraMax) filtroTxt.push(`larg ≤ ${filtro.larguraMax}`);
     const filtroLabel = filtroTxt.length ? ` (${filtroTxt.join(', ')} mm)` : '';
 
-    if (tipo === 'rect') {
-      // Mostrar dados de referência circular
-      htmlRect += `
-        <div class="rlabel">Referência circular</div>
-        <div class="metrics">
-          <div class="mc"><div class="ml">Diâmetro equiv.</div><div class="mv">Ø ${r.D_norm}</div><div class="mu">mm</div></div>
-          <div class="mc"><div class="ml">Velocidade</div><div class="mv">${r.v_real.toFixed(2)}</div><div class="mu">m/s</div></div>
-          <div class="mc"><div class="ml">Perda linear</div><div class="mv">${r.dPm_mmca.toFixed(3)}</div><div class="mu">mmca/m</div></div>
-        </div>`;
-    }
-
     if (r.rects.length > 0) {
       htmlRect += `<div class="rlabel">Condutas rectangulares${filtroLabel}</div>`;
-      htmlRect += r.rects.map(rc =>
-        `<div class="rect-row"><div class="rdims">${rc.a} × ${rc.b} mm</div><div class="rratio">rácio ${rc.ratio.toFixed(1)}:1 · Deq ${Math.round(rc.deq)} mm</div><span class="badge ${rc.ratio <= 4 ? 'bok' : rc.ratio <= 8 ? 'bwarn' : 'bbad'}">${rc.ratio <= 4 ? 'recomendado' : rc.ratio <= 8 ? 'aceitável' : 'evitar'}</span></div>`
-      ).join('');
+      const Q_m3s = estadoA.caudal / 3600;
+      htmlRect += r.rects.map(rc => {
+        const areaR = (rc.a / 1000) * (rc.b / 1000);
+        const vRect = Q_m3s / areaR;
+        const velInfo = tipo === 'rect' ? ` · v=${vRect.toFixed(2)} m/s` : '';
+        return `<div class="rect-row"><div class="rdims">${rc.a} × ${rc.b} mm</div><div class="rratio">rácio ${rc.ratio.toFixed(1)}:1 · Deq ${Math.round(rc.deq)} mm${velInfo}</div><span class="badge ${rc.ratio <= 4 ? 'bok' : rc.ratio <= 8 ? 'bwarn' : 'bbad'}">${rc.ratio <= 4 ? 'recomendado' : rc.ratio <= 8 ? 'aceitável' : 'evitar'}</span></div>`;
+      }).join('');
     } else {
       htmlRect += `<div class="rlabel" style="color:#f59e0b;">Sem condutas rectangulares dentro dos limites definidos</div>`;
     }
