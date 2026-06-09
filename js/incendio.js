@@ -423,8 +423,8 @@ function adicionarActividade() {
   const areaUsada = incendioState.currentComp.actividades.reduce((s, a) => s + a.area, 0);
   const areaDisponivel = incendioState.currentComp.area - areaUsada;
   if (area > areaDisponivel + 0.01) {
-    alert(`Área excede o compartimento.\nÁrea total: ${incendioState.currentComp.area} m²\nJá ocupada: ${areaUsada.toFixed(1)} m²\nDisponível: ${areaDisponivel.toFixed(1)} m²`);
-    return;
+    const continuar = confirm(`Área excede o compartimento.\n\nÁrea total: ${incendioState.currentComp.area} m²\nJá ocupada: ${areaUsada.toFixed(1)} m²\nDisponível: ${areaDisponivel.toFixed(1)} m²\n\nAdicionar na mesma?`);
+    if (!continuar) return;
   }
 
   const isArm = sel.startsWith('arm_');
