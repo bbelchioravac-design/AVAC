@@ -9,7 +9,7 @@ const RECT_DIMS = []; for (let v = 100; v <= 1200; v += 50) RECT_DIMS.push(v);
 const RHO = 1.2;
 
 // ─── State AVAC ───
-let estadoA = { fase: 0, modoCalc: null, caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null } };
+let estadoA = { fase: 0, modoCalc: null, caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null }, currentFilterForm: null };
 let dadosB = { trocos: [], sing90: [], sing45: [], singT: [], fixas: [] };
 
 // ─── Math helpers ───
@@ -44,7 +44,7 @@ function iniciarModoA() {
   modo = 'a';
   setupChat(); setProgress(10); setSub('AVAC — Dimensionamento de condutas');
   setHeaderBtns([{ label: '← Ferramentas', action: () => showToolMenu(currentArea) }, { label: 'Novo', primary: true, action: iniciarModoA }]);
-  estadoA = { fase: 0, modoCalc: null, caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null } };
+  estadoA = { fase: 0, modoCalc: null, caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null }, currentFilterForm: null };
   addBot('Seleccione o método de dimensionamento.');
   addPills([
     { label: 'Por perda de carga (mmca/m)', action: () => escolherModoA('ped') },
@@ -87,6 +87,7 @@ function escolherSecaoA(tipo) {
       <div class="form-actions">
         <button class="continuar-btn" onclick="definirFiltrosRect()">Continuar →</button>
       </div>`;
+    estadoA.currentFilterForm = form;
     row.appendChild(av); row.appendChild(form); logEl().appendChild(row); scroll();
   } else {
     // Circular ou ambos → directo para caudal
@@ -95,8 +96,9 @@ function escolherSecaoA(tipo) {
 }
 
 function definirFiltrosRect() {
-  const altVal = document.getElementById('rect-alt-max').value;
-  const largVal = document.getElementById('rect-larg-max').value;
+  const f = estadoA.currentFilterForm;
+  const altVal = f.querySelector('#rect-alt-max').value;
+  const largVal = f.querySelector('#rect-larg-max').value;
   estadoA.filtroRect.alturaMax = altVal ? parseInt(altVal) : null;
   estadoA.filtroRect.larguraMax = largVal ? parseInt(largVal) : null;
 
