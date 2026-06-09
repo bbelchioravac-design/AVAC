@@ -149,7 +149,7 @@ function enviarA(val) {
     setTimeout(() => {
       setProgress(20);
       addBot('Novo cálculo?');
-      const pills = [
+      const pillsNav = [
         { label: 'Sim, mesma secção', action: () => pedirCaudalA() },
         { label: 'Mudar secção', action: () => {
           addBot('Que tipo de conduta pretende?');
@@ -163,9 +163,12 @@ function enviarA(val) {
         { label: '← Ferramentas', action: () => showToolMenu(currentArea) }
       ];
       if (currentProject) {
-        pills.unshift({ label: '📄 Juntar ao relatório', action: () => juntarAoRelatorio() });
+        pillsNav.unshift({ label: '📄 Juntar ao relatório', action: () => {
+          juntarAoRelatorio();
+          addPills(pillsNav.filter(p => !p.label.includes('Juntar')));
+        }});
       }
-      addPills(pills);
+      addPills(pillsNav);
     }, 400);
   }
 }
@@ -470,14 +473,17 @@ function calcularTotal() {
   row.appendChild(av); row.appendChild(bubble); logEl().appendChild(row); scroll();
   setTimeout(() => {
     setProgress(10); addBot('Novo cálculo?');
-    const pills = [
+    const pillsNavB = [
       { label: 'Novo cálculo PED', action: iniciarModoB },
       { label: '← Ferramentas', action: () => showToolMenu(currentArea) },
       { label: '← Áreas', action: showAreaMenu }
     ];
     if (currentProject) {
-      pills.unshift({ label: '📄 Juntar ao relatório', action: () => juntarAoRelatorio() });
+      pillsNavB.unshift({ label: '📄 Juntar ao relatório', action: () => {
+        juntarAoRelatorio();
+        addPills(pillsNavB.filter(p => !p.label.includes('Juntar')));
+      }});
     }
-    addPills(pills);
+    addPills(pillsNavB);
   }, 500);
 }

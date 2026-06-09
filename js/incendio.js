@@ -680,15 +680,14 @@ function mostrarResultadoFinal() {
   setTimeout(() => {
     setProgress(10);
     addBot('Novo cálculo?');
-    const pills = [
+    const pillsNav = [
       { label: 'Novo cálculo', action: iniciarCargaIncendio },
       { label: '← Ferramentas', action: () => showToolMenu(currentArea) },
       { label: '← Áreas', action: showAreaMenu }
     ];
     if (currentProject) {
-      pills.unshift({ label: '📄 Gerar Relatório Word', action: gerarRelatorioWord });
-      pills.unshift({ label: '📋 Juntar ao relatório', action: () => juntarAoRelatorio() });
+      pillsNav.unshift({ label: '📄 Gerar Relatório Word', action: gerarRelatorioWord });
     }
-    addPills(pills);
+    addPills(pillsNav);
   }, 500);
 }
