@@ -9,7 +9,7 @@ const RECT_DIMS = []; for (let v = 100; v <= 1200; v += 50) RECT_DIMS.push(v);
 const RHO = 1.2;
 
 // ─── State AVAC ───
-let estadoA = { fase: 0, modoCalc: null, caudal: null };
+let estadoA = { fase: 0, modoCalc: null, caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null } };
 let dadosB = { trocos: [], sing90: [], sing45: [], singT: [], fixas: [] };
 
 // ─── Math helpers ───
@@ -44,7 +44,7 @@ function iniciarModoA() {
   modo = 'a';
   setupChat(); setProgress(10); setSub('AVAC — Dimensionamento de condutas');
   setHeaderBtns([{ label: '← Ferramentas', action: () => showToolMenu(currentArea) }, { label: 'Novo', primary: true, action: iniciarModoA }]);
-  estadoA = { fase: 0, modoCalc: null, caudal: null };
+  estadoA = { fase: 0, modoCalc: null, caudal: null, tipoSecao: null, filtroRect: { alturaMax: null, larguraMax: null } };
   addBot('Seleccione o método de dimensionamento.');
   addPills([
     { label: 'Por perda de carga (mmca/m)', action: () => escolherModoA('ped') },
@@ -53,7 +53,68 @@ function iniciarModoA() {
 }
 
 function escolherModoA(m) {
-  estadoA.modoCalc = m; estadoA.fase = 1; setProgress(35);
+  estadoA.modoCalc = m; setProgress(25);
+  addBot('Que tipo de conduta pretende?');
+  addPills([
+    { label: 'Circular', action: () => escolherSecaoA('circ') },
+    { label: 'Rectangular', action: () => escolherSecaoA('rect') },
+    { label: 'Deixa-me escolher', action: () => escolherSecaoA('ambos') }
+  ]);
+}
+
+function escolherSecaoA(tipo) {
+  estadoA.tipoSecao = tipo;
+
+  if (tipo === 'rect') {
+    // Mostrar formulário de filtros rectangulares
+    setProgress(30);
+    addBot('Defina os limites para a conduta rectangular (opcional).');
+    const row = document.createElement('div'); row.className = 'bot-row';
+    const av = document.createElement('div'); av.className = 'bot-av'; av.innerHTML = AVATAR_SVG;
+    const form = document.createElement('div'); form.className = 'input-form';
+    form.innerHTML = `
+      <div class="form-row">
+        <div class="form-field">
+          <label>Altura máxima (mm)</label>
+          <input type="number" id="rect-alt-max" placeholder="ex: 300 (vazio = sem limite)" min="100" step="50"/>
+        </div>
+        <div class="form-field">
+          <label>Largura máxima (mm)</label>
+          <input type="number" id="rect-larg-max" placeholder="ex: 600 (vazio = sem limite)" min="100" step="50"/>
+        </div>
+      </div>
+      <div style="font-size:11px;color:#5a7aaa;margin:4px 0 8px;">Estes limites aplicam-se a todos os cálculos desta sessão.</div>
+      <div class="form-actions">
+        <button class="continuar-btn" onclick="definirFiltrosRect()">Continuar →</button>
+      </div>`;
+    row.appendChild(av); row.appendChild(form); logEl().appendChild(row); scroll();
+  } else {
+    // Circular ou ambos → directo para caudal
+    pedirCaudalA();
+  }
+}
+
+function definirFiltrosRect() {
+  const altVal = document.getElementById('rect-alt-max').value;
+  const largVal = document.getElementById('rect-larg-max').value;
+  estadoA.filtroRect.alturaMax = altVal ? parseInt(altVal) : null;
+  estadoA.filtroRect.larguraMax = largVal ? parseInt(largVal) : null;
+
+  // Feedback sobre filtros
+  const filtros = [];
+  if (estadoA.filtroRect.alturaMax) filtros.push(`altura ≤ ${estadoA.filtroRect.alturaMax} mm`);
+  if (estadoA.filtroRect.larguraMax) filtros.push(`largura ≤ ${estadoA.filtroRect.larguraMax} mm`);
+  if (filtros.length) {
+    addUser('Filtros: ' + filtros.join(', '));
+  } else {
+    addUser('Sem limites dimensionais');
+  }
+
+  pedirCaudalA();
+}
+
+function pedirCaudalA() {
+  estadoA.fase = 1; setProgress(45);
   addBot('Qual o <strong>caudal</strong> em m³/h?');
   enableInput('Caudal em m³/h...');
 }
@@ -69,7 +130,7 @@ function enviarA(val) {
   } else if (estadoA.fase === 2) {
     setProgress(100);
     const res = calcularA(estadoA.caudal, num, estadoA.modoCalc);
-    projectLog.push({ tool: 'dim_condutas', input: { caudal: estadoA.caudal, param: num, modo: estadoA.modoCalc }, result: res, ts: new Date().toISOString() });
+    projectLog.push({ tool: 'dim_condutas', input: { caudal: estadoA.caudal, param: num, modo: estadoA.modoCalc, tipoSecao: estadoA.tipoSecao, filtroRect: { ...estadoA.filtroRect } }, result: res, ts: new Date().toISOString() });
     saveProject();
     addResultA(res);
     estadoA.fase = 1; estadoA.caudal = null;
@@ -77,7 +138,7 @@ function enviarA(val) {
       setProgress(20);
       addBot('Novo cálculo?');
       addPills([
-        { label: 'Sim, mesmo método', action: () => { estadoA.fase = 1; setProgress(35); addBot('Qual o <strong>caudal</strong> em m³/h?'); enableInput('Caudal em m³/h...'); } },
+        { label: 'Sim, mesmo método', action: () => pedirCaudalA() },
         { label: 'Mudar método', action: iniciarModoA },
         { label: '← Ferramentas', action: () => showToolMenu(currentArea) }
       ]);
@@ -98,10 +159,31 @@ function calcularA(Q_h, param, mc) {
 
 function calcRects(D_norm) {
   const dims = [];
-  for (let a = 100; a <= 1200; a += 50) for (let b = 100; b <= a; b += 50) { const deq = deqHuebscher(a, b); dims.push({ a, b, deq, diff: Math.abs(deq - D_norm), ratio: a / b }); }
+  const filtro = estadoA.filtroRect;
+  for (let a = 100; a <= 1200; a += 50) {
+    // Aplicar filtro de largura máxima
+    if (filtro.larguraMax && a > filtro.larguraMax) continue;
+    for (let b = 100; b <= a; b += 50) {
+      // Aplicar filtro de altura máxima (b é a dimensão menor)
+      if (filtro.alturaMax && b > filtro.alturaMax) continue;
+      // Verificar também o inverso: se alturaMax limita a, ou larguraMax limita b
+      if (filtro.alturaMax && a > filtro.alturaMax && b > filtro.alturaMax) continue;
+      const deq = deqHuebscher(a, b);
+      dims.push({ a, b, deq, diff: Math.abs(deq - D_norm), ratio: a / b });
+    }
+  }
   dims.sort((x, y) => x.diff - y.diff);
   const out = [], seen = new Set();
-  for (const d of dims) { const k = `${d.a}x${d.b}`; if (!seen.has(k) && out.length < 3) { seen.add(k); out.push(d); } if (out.length >= 3) break; }
+  for (const d of dims) {
+    // Garantir que os filtros são respeitados em ambas as orientações
+    const dimMenor = Math.min(d.a, d.b);
+    const dimMaior = Math.max(d.a, d.b);
+    if (filtro.alturaMax && dimMenor > filtro.alturaMax) continue;
+    if (filtro.larguraMax && dimMaior > filtro.larguraMax) continue;
+    const k = `${d.a}x${d.b}`;
+    if (!seen.has(k) && out.length < 5) { seen.add(k); out.push(d); }
+    if (out.length >= 5) break;
+  }
   return out;
 }
 
@@ -109,16 +191,51 @@ function addResultA(r) {
   const row = document.createElement('div'); row.className = 'bot-row';
   const av = document.createElement('div'); av.className = 'bot-av'; av.innerHTML = AVATAR_SVG;
   const bubble = document.createElement('div'); bubble.className = 'result-bubble';
-  bubble.innerHTML = `
-    <div class="rlabel">Conduta circular</div>
-    <div class="metrics">
-      <div class="mc"><div class="ml">Diâmetro norm.</div><div class="mv">Ø ${r.D_norm}</div><div class="mu">mm (calc: ${Math.round(r.D_calc_mm)} mm)</div></div>
-      <div class="mc"><div class="ml">Velocidade real</div><div class="mv">${r.v_real.toFixed(2)}</div><div class="mu">m/s</div></div>
-      <div class="mc"><div class="ml">Perda linear</div><div class="mv">${r.dPm_Pa.toFixed(2)}</div><div class="mu">Pa/m · ${r.dPm_mmca.toFixed(3)} mmca/m</div></div>
-    </div>
-    <div class="rlabel">Equivalentes rectangulares</div>
-    ${r.rects.map(rc => `<div class="rect-row"><div class="rdims">${rc.a} × ${rc.b} mm</div><div class="rratio">rácio ${rc.ratio.toFixed(1)}:1 · Deq ${Math.round(rc.deq)} mm</div><span class="badge ${rc.ratio <= 4 ? 'bok' : rc.ratio <= 8 ? 'bwarn' : 'bbad'}">${rc.ratio <= 4 ? 'recomendado' : rc.ratio <= 8 ? 'aceitável' : 'evitar'}</span></div>`).join('')}
-  `;
+  const tipo = estadoA.tipoSecao;
+
+  // Circular
+  let htmlCirc = '';
+  if (tipo === 'circ' || tipo === 'ambos') {
+    htmlCirc = `
+      <div class="rlabel">Conduta circular</div>
+      <div class="metrics">
+        <div class="mc"><div class="ml">Diâmetro norm.</div><div class="mv">Ø ${r.D_norm}</div><div class="mu">mm (calc: ${Math.round(r.D_calc_mm)} mm)</div></div>
+        <div class="mc"><div class="ml">Velocidade real</div><div class="mv">${r.v_real.toFixed(2)}</div><div class="mu">m/s</div></div>
+        <div class="mc"><div class="ml">Perda linear</div><div class="mv">${r.dPm_Pa.toFixed(2)}</div><div class="mu">Pa/m · ${r.dPm_mmca.toFixed(3)} mmca/m</div></div>
+      </div>`;
+  }
+
+  // Rectangular
+  let htmlRect = '';
+  if (tipo === 'rect' || tipo === 'ambos') {
+    const filtro = estadoA.filtroRect;
+    const filtroTxt = [];
+    if (filtro.alturaMax) filtroTxt.push(`alt ≤ ${filtro.alturaMax}`);
+    if (filtro.larguraMax) filtroTxt.push(`larg ≤ ${filtro.larguraMax}`);
+    const filtroLabel = filtroTxt.length ? ` (${filtroTxt.join(', ')} mm)` : '';
+
+    if (tipo === 'rect') {
+      // Mostrar dados de referência circular
+      htmlRect += `
+        <div class="rlabel">Referência circular</div>
+        <div class="metrics">
+          <div class="mc"><div class="ml">Diâmetro equiv.</div><div class="mv">Ø ${r.D_norm}</div><div class="mu">mm</div></div>
+          <div class="mc"><div class="ml">Velocidade</div><div class="mv">${r.v_real.toFixed(2)}</div><div class="mu">m/s</div></div>
+          <div class="mc"><div class="ml">Perda linear</div><div class="mv">${r.dPm_mmca.toFixed(3)}</div><div class="mu">mmca/m</div></div>
+        </div>`;
+    }
+
+    if (r.rects.length > 0) {
+      htmlRect += `<div class="rlabel">Condutas rectangulares${filtroLabel}</div>`;
+      htmlRect += r.rects.map(rc =>
+        `<div class="rect-row"><div class="rdims">${rc.a} × ${rc.b} mm</div><div class="rratio">rácio ${rc.ratio.toFixed(1)}:1 · Deq ${Math.round(rc.deq)} mm</div><span class="badge ${rc.ratio <= 4 ? 'bok' : rc.ratio <= 8 ? 'bwarn' : 'bbad'}">${rc.ratio <= 4 ? 'recomendado' : rc.ratio <= 8 ? 'aceitável' : 'evitar'}</span></div>`
+      ).join('');
+    } else {
+      htmlRect += `<div class="rlabel" style="color:#f59e0b;">Sem condutas rectangulares dentro dos limites definidos</div>`;
+    }
+  }
+
+  bubble.innerHTML = htmlCirc + htmlRect;
   row.appendChild(av); row.appendChild(bubble); logEl().appendChild(row); scroll();
 }
 
