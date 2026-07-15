@@ -34,7 +34,8 @@ let incendioState = {
   compartimentos: [],
   currentComp: null,
   currentForm: null,
-  fase: 0
+  fase: 0,
+  exclusivamenteArmazem: null
 };
 
 // ─── Searchable select ───
@@ -225,10 +226,12 @@ function calcularCompartimento(comp) {
     qs_total += contribuicao;
   });
 
-  // Categoria de risco
-  // Para armazenamento, dividir por 10 antes de classificar
+  // Categoria de risco — nota ao quadro do Anexo III do DL 220/2008:
+  // limites ×10 (equivalente a qs÷10) APENAS se a UT for EXCLUSIVAMENTE
+  // de armazéns. Ter actividades de armazenamento não chega.
   const temArmazenamento = comp.actividades.some(a => a.modo === 'armazenamento');
-  const qs_classificacao = temArmazenamento ? qs_total / 10 : qs_total;
+  const exclusivo = incendioState.exclusivamenteArmazem === true;
+  const qs_classificacao = exclusivo ? qs_total / 10 : qs_total;
   const categoria = CATEGORIAS_RISCO.find(c => qs_classificacao <= c.max);
 
   return {
@@ -238,7 +241,8 @@ function calcularCompartimento(comp) {
     qs_classificacao: qs_classificacao,
     categoria: categoria,
     linhas: linhas,
-    temArmazenamento: temArmazenamento
+    temArmazenamento: temArmazenamento,
+    exclusivoArmazem: exclusivo
   };
 }
 
@@ -254,10 +258,20 @@ function iniciarCargaIncendio() {
     { label: 'Novo', primary: true, action: iniciarCargaIncendio }
   ]);
 
-  incendioState = { compartimentos: [], currentComp: null, currentForm: null, fase: 0 };
+  incendioState = { compartimentos: [], currentComp: null, currentForm: null, fase: 0, exclusivamenteArmazem: null };
 
   addBot('Cálculo da <strong>densidade de carga de incêndio modificada</strong>.<br>Método probabilístico — Despacho n.º 8954/2020.<br><br>Aplicável a UT XI (Bibliotecas e Arquivos) e UT XII (Industriais, Oficinas e Armazéns).');
 
+  // Nota ao quadro do Anexo III do DL 220/2008: limites ×10 SÓ quando a UT
+  // se destina EXCLUSIVAMENTE a armazéns — não basta haver armazenamento.
+  addBot('A utilização-tipo destina-se <strong>exclusivamente a armazéns</strong>?<br><span style="font-size:11px;color:var(--tx-dim)">Se sim, os limites de classificação são 10× superiores (nota ao quadro do Anexo III do DL n.º 220/2008). Actividades de fabricação ou oficina no mesmo edifício = Não.</span>');
+  addPills([
+    { label: 'Sim — só armazéns', action: () => { incendioState.exclusivamenteArmazem = true; avancarInicioIncendio(); } },
+    { label: 'Não — uso misto/outro', action: () => { incendioState.exclusivamenteArmazem = false; avancarInicioIncendio(); } }
+  ]);
+}
+
+function avancarInicioIncendio() {
   if (!quadro2Loaded) {
     addBot('⚠️ A carregar tabela de actividades...');
     setTimeout(() => {
@@ -387,6 +401,9 @@ function pedirActividade() {
   row.appendChild(av); row.appendChild(form);
   logEl().appendChild(row); scroll();
   initSearchableSelect(form);
+
+  // Edição: mostrar as actividades já existentes (e a área realmente disponível)
+  if (comp.actividades.length) renderActividadesList();
 }
 
 function onActividadeChange() {
@@ -581,7 +598,7 @@ function mostrarResultadoCompartimento(res) {
       <div class="total-card">
         <div class="total-label">Densidade de carga de incêndio modificada (qs)</div>
         <div class="total-value">${res.qs.toFixed(1)}</div>
-        <div class="total-unit">MJ/m²${res.temArmazenamento ? ' (÷10 para classificação = ' + res.qs_classificacao.toFixed(1) + ' MJ/m²)' : ''}</div>
+        <div class="total-unit">MJ/m²${res.exclusivoArmazem ? ' (limites ×10: classificação por ' + res.qs_classificacao.toFixed(1) + ' MJ/m²)' : ''}</div>
       </div>
       <div class="total-card">
         <div class="total-label">Categoria de risco</div>
@@ -604,7 +621,9 @@ function mostrarResultadoFinal() {
   const q_total = sum_qs_S / sum_S;
 
   const temArm = comps.some(c => c.resultado.temArmazenamento);
-  const q_class = temArm ? q_total / 10 : q_total;
+  const temFab = comps.some(c => c.resultado.linhas.some(l => l.modo === 'Fabricação'));
+  const exclusivo = incendioState.exclusivamenteArmazem === true;
+  const q_class = exclusivo ? q_total / 10 : q_total;
   const categoria = CATEGORIAS_RISCO.find(c => q_class <= c.max);
 
   const row = document.createElement('div'); row.className = 'bot-row';
@@ -656,7 +675,7 @@ function mostrarResultadoFinal() {
       <div class="total-card">
         <div class="total-label">qs ${comps.length > 1 ? 'global da UT' : 'do compartimento'}</div>
         <div class="total-value">${q_total.toFixed(1)}</div>
-        <div class="total-unit">MJ/m²${temArm ? ' (÷10 = ' + q_class.toFixed(1) + ' MJ/m²)' : ''} · Área total: ${sum_S.toFixed(1)} m²</div>
+        <div class="total-unit">MJ/m²${exclusivo ? ' (limites ×10: classificação por ' + q_class.toFixed(1) + ' MJ/m²)' : ''} · Área total: ${sum_S.toFixed(1)} m²</div>
       </div>
       <div class="total-card">
         <div class="total-label">Categoria de risco</div>
@@ -664,6 +683,7 @@ function mostrarResultadoFinal() {
         <div class="total-unit">${categoria.nivel}</div>
       </div>
     </div>
+    ${exclusivo && temFab ? '<div class="rlabel" style="color:#f59e0b;margin-top:10px;">⚠️ Declarou UT exclusivamente de armazéns, mas existem actividades de FABRICAÇÃO no cálculo. Se a UT tem fabricação/oficina, os limites ×10 NÃO se aplicam — refaça respondendo "Não" à pergunta inicial.</div>' : ''}
     ${tabelaDetalhe}`;
 
   row.appendChild(av); row.appendChild(bubble);
@@ -672,7 +692,7 @@ function mostrarResultadoFinal() {
   projectLog.push({
     tool: 'carga_incendio',
     input: comps,
-    result: { q_total, q_class, categoria, compartimentos: comps.map(c => c.resultado) },
+    result: { q_total, q_class, categoria, exclusivoArmazem: exclusivo, compartimentos: comps.map(c => c.resultado) },
     ts: new Date().toISOString()
   });
   saveProject();
@@ -687,6 +707,18 @@ function mostrarResultadoFinal() {
     ];
     if (currentProject) {
       pillsNav.unshift({ label: '📄 Gerar Relatório Word', action: gerarRelatorioWord });
+      if (projectLog.some(l => l.incluirRelatorio)) {
+        pillsNav.unshift({ label: '📊 Exportar Excel', action: exportarExcel });
+      }
+      pillsNav.unshift({ label: '📋 Juntar ao relatório', action: () => {
+        juntarAoRelatorio();
+        addPills([
+          { label: '📊 Exportar Excel', action: exportarExcel },
+          { label: '📄 Gerar Relatório Word', action: gerarRelatorioWord },
+          { label: 'Novo cálculo', action: iniciarCargaIncendio },
+          { label: '← Ferramentas', action: () => showToolMenu(currentArea) }
+        ]);
+      }});
     }
     addPills(pillsNav);
   }, 500);

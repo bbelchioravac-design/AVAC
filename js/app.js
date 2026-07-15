@@ -34,27 +34,80 @@ let modo = null;
 let projectLog = [];
 let currentProject = null;
 
-// ─── Projecto ───
-const PROJECT_STORAGE_KEY = 'alios_current_project';
+// ─── Projectos (histórico) ───
+const PROJECTS_KEY = 'alios_projects';
+const CURRENT_PROJECT_ID_KEY = 'alios_current_project_id';
+const PROJECT_STORAGE_KEY = 'alios_current_project'; // formato antigo (só migração)
+let projects = [];
+
+function genProjectId() {
+  return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function saveProjects() {
+  localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
+}
 
 function loadProject() {
+  try { projects = JSON.parse(localStorage.getItem(PROJECTS_KEY)) || []; } catch (e) { projects = []; }
+  // Migração do formato antigo (projecto único) — ninguém perde nada
   try {
-    const data = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
-    if (data && data.nome) { currentProject = data; projectLog = data.log || []; }
-  } catch(e) {}
+    const old = JSON.parse(localStorage.getItem(PROJECT_STORAGE_KEY));
+    if (old && old.nome) {
+      old.id = genProjectId();
+      projects.unshift(old);
+      localStorage.removeItem(PROJECT_STORAGE_KEY);
+      saveProjects();
+      localStorage.setItem(CURRENT_PROJECT_ID_KEY, old.id);
+    }
+  } catch (e) {}
+  const cid = localStorage.getItem(CURRENT_PROJECT_ID_KEY);
+  const found = projects.find(p => p.id === cid);
+  if (found) { currentProject = found; projectLog = found.log || []; }
 }
 
 function saveProject() {
   if (currentProject) {
     currentProject.log = projectLog;
-    localStorage.setItem(PROJECT_STORAGE_KEY, JSON.stringify(currentProject));
+    saveProjects();
   }
 }
 
-function clearProject() {
+function fecharProjecto() {
+  // Fecha sem apagar — o projecto fica no histórico
+  saveProject();
   currentProject = null;
   projectLog = [];
-  localStorage.removeItem(PROJECT_STORAGE_KEY);
+  localStorage.removeItem(CURRENT_PROJECT_ID_KEY);
+  showAreaMenu();
+}
+
+function abrirProjecto(id) {
+  saveProject();
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  currentProject = p;
+  projectLog = p.log || [];
+  localStorage.setItem(CURRENT_PROJECT_ID_KEY, id);
+  showAreaMenu();
+}
+
+function apagarProjecto(id) {
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  const n = (p.log || []).length;
+  const msg = n > 0
+    ? `Apagar o projecto "${p.nome}"?\nTem ${n} cálculo(s) registado(s). Esta acção não tem volta.`
+    : `Apagar o projecto "${p.nome}"?`;
+  if (!confirm(msg)) return;
+  projects = projects.filter(x => x.id !== id);
+  saveProjects();
+  if (currentProject && currentProject.id === id) {
+    currentProject = null;
+    projectLog = [];
+    localStorage.removeItem(CURRENT_PROJECT_ID_KEY);
+  }
+  showProjectList();
 }
 
 // ─── DOM helpers ───
@@ -293,6 +346,21 @@ function exportarExcel() {
     XLSX.utils.book_append_sheet(wb, ws, 'Carga Incêndio');
   }
 
+  // Sheet: Pressupostos de cálculo (só se houver cálculos AVAC)
+  if (condutas.length > 0 || ped.length > 0) {
+    const pressupostos = [
+      { 'Parâmetro': 'Massa volúmica do ar (ρ)', 'Valor': '1,2 kg/m³' },
+      { 'Parâmetro': 'Factor de atrito (λ)', 'Valor': '0,02 (conduta metálica lisa)' },
+      { 'Parâmetro': 'Coef. perda localizada — Curva 90°', 'Valor': 'ζ = 0,4' },
+      { 'Parâmetro': 'Coef. perda localizada — Curva 45°', 'Valor': 'ζ = 0,17' },
+      { 'Parâmetro': 'Coef. perda localizada — Derivação T', 'Valor': 'ζ = 0,9' },
+      { 'Parâmetro': 'Diâmetro equivalente rectangular', 'Valor': 'Huebscher: Deq = 1,265·(a·b)^0,6/(a+b)^0,2' },
+      { 'Parâmetro': 'Diâmetro normalizado', 'Valor': 'Arredondado por excesso (critério = máximo)' },
+    ];
+    const wsP = XLSX.utils.json_to_sheet(pressupostos);
+    XLSX.utils.book_append_sheet(wb, wsP, 'Pressupostos');
+  }
+
   const nomeFile = currentProject ? currentProject.nome.replace(/[^a-zA-Z0-9À-ÿ\s-]/g, '').trim() : 'ALIOS_Calculos';
   XLSX.writeFile(wb, `${nomeFile} - Cálculos.xlsx`);
 }
@@ -358,6 +426,26 @@ function injectProjectCSS() {
     .pf-btn-save:hover { background: #3d9dff; }
     .pf-btn-cancel { background: #1a2744; color: #8090b0; }
     .pf-btn-cancel:hover { background: #243352; }
+    .proj-list { max-height: 260px; overflow-y: auto; }
+    .proj-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border-radius: 8px;
+      border: 1px solid transparent;
+    }
+    .proj-row:hover { background: rgba(30,138,255,0.08); border-color: #1a2744; }
+    .proj-row.proj-activo { border-color: #10b98144; }
+    .proj-row-info { flex: 1; cursor: pointer; min-width: 0; }
+    .proj-row-nome { font-size: 13px; color: #d0d6e8; font-weight: 500; }
+    .proj-row-meta {
+      font-size: 11px; color: #5a7aaa;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .proj-row-del {
+      background: none; border: none; color: #5a7aaa;
+      cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .proj-row-del:hover { color: #ef4444; background: rgba(239,68,68,0.1); }
   `;
   document.head.appendChild(style);
 }
@@ -374,8 +462,9 @@ function renderProjectCard() {
       <div class="project-card-header">
         <div class="project-card-title">📋 Projecto activo</div>
         <div class="project-card-actions">
+          <button onclick="showProjectList()">Projectos${projects.length > 1 ? ' (' + projects.length + ')' : ''}</button>
           <button onclick="showProjectForm(true)">Editar</button>
-          <button onclick="confirmClearProject()">Limpar</button>
+          <button onclick="fecharProjecto()">Fechar</button>
         </div>
       </div>
       <div class="project-info">
@@ -389,13 +478,50 @@ function renderProjectCard() {
     card.innerHTML = `
       <div class="project-card-header">
         <div class="project-card-title">📋 Projecto</div>
+        ${projects.length ? `<div class="project-card-actions"><button onclick="showProjectList()">Projectos (${projects.length})</button></div>` : ''}
       </div>
       <div class="project-empty">
         Sem projecto — cálculos avulsos.
         <button style="background:none;border:none;color:#1E8AFF;cursor:pointer;font-size:13px;text-decoration:underline;padding:0 4px;" onclick="showProjectForm(false)">Criar projecto</button>
+        ${projects.length ? `<button style="background:none;border:none;color:#1E8AFF;cursor:pointer;font-size:13px;text-decoration:underline;padding:0 4px;" onclick="showProjectList()">Abrir existente</button>` : ''}
       </div>`;
   }
   return card;
+}
+
+function showProjectList() {
+  const card = document.getElementById('project-card');
+  if (!card) return;
+  const rows = projects.map(p => {
+    const n = (p.log || []).length;
+    const activo = currentProject && currentProject.id === p.id;
+    const data = p.criado ? new Date(p.criado).toLocaleDateString('pt-PT') : '';
+    return `<div class="proj-row${activo ? ' proj-activo' : ''}">
+      <div class="proj-row-info" onclick="abrirProjecto('${p.id}')">
+        <div class="proj-row-nome">${p.nome}${activo ? ' <span style="color:#10b981;font-size:11px;">● activo</span>' : ''}</div>
+        <div class="proj-row-meta">${n} cálculo${n !== 1 ? 's' : ''}${data ? ' · criado ' + data : ''}${p.morada ? ' · ' + p.morada : ''}</div>
+      </div>
+      <button class="proj-row-del" title="Apagar projecto" onclick="apagarProjecto('${p.id}')">✕</button>
+    </div>`;
+  }).join('');
+  card.innerHTML = `
+    <div class="project-card-header">
+      <div class="project-card-title">📋 Projectos (${projects.length})</div>
+      <div class="project-card-actions">
+        <button onclick="showProjectFormFromList()">+ Novo</button>
+        <button onclick="showAreaMenu()">Fechar lista</button>
+      </div>
+    </div>
+    ${projects.length ? `<div class="proj-list">${rows}</div>` : '<div class="project-empty">Nenhum projecto guardado.</div>'}`;
+}
+
+function showProjectFormFromList() {
+  // Criar novo a partir da lista: fecha o actual (fica guardado) e abre o formulário
+  saveProject();
+  currentProject = null;
+  projectLog = [];
+  localStorage.removeItem(CURRENT_PROJECT_ID_KEY);
+  showProjectForm(false);
 }
 
 function showProjectForm(isEdit) {
@@ -437,8 +563,10 @@ function submitProject() {
   const requerente = document.getElementById('pf-requerente').value.trim();
 
   if (!currentProject) {
-    currentProject = { nome, morada, requerente, criado: new Date().toISOString() };
+    currentProject = { id: genProjectId(), nome, morada, requerente, criado: new Date().toISOString(), log: [] };
     projectLog = [];
+    projects.unshift(currentProject);
+    localStorage.setItem(CURRENT_PROJECT_ID_KEY, currentProject.id);
   } else {
     currentProject.nome = nome;
     currentProject.morada = morada;
@@ -446,17 +574,6 @@ function submitProject() {
   }
   saveProject();
   showAreaMenu();
-}
-
-function confirmClearProject() {
-  const nCalc = projectLog.length;
-  const msg = nCalc > 0
-    ? `Tem a certeza? O projecto "${currentProject.nome}" tem ${nCalc} cálculo(s) registado(s). Ao limpar, perde o relatório.`
-    : `Limpar o projecto "${currentProject.nome}"?`;
-  if (confirm(msg)) {
-    clearProject();
-    showAreaMenu();
-  }
 }
 
 // ─── Area Menu ───

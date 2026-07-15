@@ -134,6 +134,12 @@ async function gerarRelatorioWord() {
   const incendioLogs = projectLog.filter(l => l.tool === 'carga_incendio');
   const capitulo = [];
 
+  // Vários cálculos no projecto: avisar que o relatório usa o mais recente
+  if (incendioLogs.length > 1) {
+    const dataUltimo = new Date(incendioLogs[incendioLogs.length - 1].ts).toLocaleString('pt-PT');
+    if (!confirm(`Este projecto tem ${incendioLogs.length} cálculos de carga de incêndio.\nO relatório inclui apenas o MAIS RECENTE (${dataUltimo}).\n\nContinuar?`)) return;
+  }
+
   if (incendioLogs.length > 0) {
     const lastCalc = incendioLogs[incendioLogs.length - 1];
     const res = lastCalc.result;
@@ -342,7 +348,7 @@ async function gerarRelatorioWord() {
 
     if (res.q_class !== res.q_total) {
       capitulo.push(
-        para([txt(`Nota: Para efeitos de classificação, considerou-se qs ÷ 10 = ${res.q_class.toFixed(1)} MJ/m² (armazenamento).`, {
+        para([txt(`Nota: A utilização-tipo destina-se exclusivamente a armazéns, pelo que os limites máximos de carga de incêndio modificada para efeitos de classificação são 10 vezes superiores aos indicados no quadro (nota ao quadro do Anexo III do DL n.º 220/2008). Valor considerado para classificação: ${res.q_class.toFixed(1)} MJ/m².`, {
           italics: true, color: COR_CINZA, size: 20
         })])
       );

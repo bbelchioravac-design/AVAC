@@ -4,8 +4,9 @@
 // ═══════════════════════════════════════════════════
 
 // ─── Constants AVAC ───
-const DN = [80, 100, 125, 150, 160, 180, 200, 224, 250, 280, 300, 350, 400, 450, 500, 550, 600];
-const RECT_DIMS = []; for (let v = 100; v <= 1200; v += 50) RECT_DIMS.push(v);
+const DN = [80, 100, 125, 150, 160, 180, 200, 224, 250, 280, 300, 350, 400, 450, 500, 550, 600, 630, 710, 800, 900, 1000, 1120, 1250];
+const RECT_MAX = 2000;
+const RECT_DIMS = []; for (let v = 100; v <= RECT_MAX; v += 50) RECT_DIMS.push(v);
 const RHO = 1.2;
 
 // ─── State AVAC ───
@@ -199,10 +200,16 @@ function calcularA(Q_h, param, mc) {
     D_calc_m = Math.sqrt(4 * Q / (Math.PI * param));
   }
   const D_calc_mm = D_calc_m * 1000;
-  const D_norm = DN.reduce((p, c) => Math.abs(c - D_calc_mm) < Math.abs(p - D_calc_mm) ? c : p);
+  // Arredondar para CIMA: o critério (PED ou velocidade) é um máximo,
+  // logo o diâmetro normalizado tem de ser >= ao calculado.
+  let D_norm = DN.find(d => d >= D_calc_mm);
+  let foraGama = false;
+  if (!D_norm) { D_norm = DN[DN.length - 1]; foraGama = true; }
   const D_norm_m = D_norm / 1000, A = Math.PI * D_norm_m * D_norm_m / 4, v_real = Q / A;
   const dPm_Pa = lambda * RHO * v_real * v_real / (2 * D_norm_m), dPm_mmca = dPm_Pa / 9.81;
-  return { D_norm, D_calc_mm, v_real, dPm_Pa, dPm_mmca, rects: calcRects(D_norm) };
+  // Fora de gama: os equivalentes rectangulares são calculados para o
+  // diâmetro NECESSÁRIO (não o normalizado), para cumprirem o critério.
+  return { D_norm, D_calc_mm, v_real, dPm_Pa, dPm_mmca, foraGama, rects: calcRects(foraGama ? D_calc_mm : D_norm) };
 }
 
 function calcRects(D_norm) {
@@ -220,7 +227,7 @@ function calcRects(D_norm) {
     limMenor = filtro.larguraMax;
   }
 
-  for (let a = 100; a <= 1200; a += 50) {
+  for (let a = 100; a <= RECT_MAX; a += 50) {
     if (limMaior && a > limMaior) continue;
     for (let b = 100; b <= a; b += 50) {
       if (limMenor && b > limMenor) continue;
@@ -249,6 +256,12 @@ function addResultA(r) {
   const pedPrimario = isPa ? `${r.dPm_Pa.toFixed(2)} Pa/m` : `${r.dPm_mmca.toFixed(3)} mmca/m`;
   const pedSecundario = isPa ? `${r.dPm_mmca.toFixed(3)} mmca/m` : `${r.dPm_Pa.toFixed(2)} Pa/m`;
 
+  // Aviso: fora de gama da tabela de diâmetros
+  let htmlAviso = '';
+  if (r.foraGama) {
+    htmlAviso = `<div class="rlabel" style="color:#ef4444;">⚠️ O cálculo pede Ø${Math.round(r.D_calc_mm)} mm — acima do maior diâmetro da tabela (Ø${DN[DN.length - 1]}). A velocidade/PED indicadas para o Ø${r.D_norm} EXCEDEM o critério pedido. Considere os equivalentes rectangulares abaixo ou múltiplas condutas.</div>`;
+  }
+
   // Circular
   let htmlCirc = '';
   if (tipo === 'circ' || tipo === 'ambos') {
@@ -261,9 +274,9 @@ function addResultA(r) {
       </div>`;
   }
 
-  // Rectangular
+  // Rectangular (fora de gama: mostra sempre, como alternativa viável)
   let htmlRect = '';
-  if (tipo === 'rect' || tipo === 'ambos') {
+  if (tipo === 'rect' || tipo === 'ambos' || r.foraGama) {
     const filtro = estadoA.filtroRect;
     const filtroTxt = [];
     if (filtro.alturaMax) filtroTxt.push(`alt ≤ ${filtro.alturaMax}`);
@@ -287,7 +300,7 @@ function addResultA(r) {
     }
   }
 
-  bubble.innerHTML = htmlCirc + htmlRect;
+  bubble.innerHTML = htmlAviso + htmlCirc + htmlRect;
   row.appendChild(av); row.appendChild(bubble); logEl().appendChild(row); scroll();
 }
 
