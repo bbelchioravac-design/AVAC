@@ -398,6 +398,7 @@ function tmShowLista() {
       <span><span class="tm-top-label">Zona climática de Inverno</span><span class="tm-seg">${zonas}</span></span>
       <span><span class="tm-top-label">Edifício</span><span class="tm-seg">${tipos}</span></span>
       <span style="flex:1"></span>
+      <button class="tm-btn tm-btn-sec" onclick="tmImprimirCaderno()">🖨 Caderno (PDF)</button>
       <span style="font-size:11px;color:#5a7aaa">Umáx: Portaria n.º 138-I/2021</span>
     </div>`;
 
@@ -549,6 +550,19 @@ function tmShowEditor(idx) {
   if (calc.incompleto) head += `<div class="tm-aviso">⚠️ Há camadas sem λ/R definido — preenche o R manual (caixa a âmbar) para o cálculo ficar completo.</div>`;
   if (t.front === 'solo') head += `<div class="tm-aviso" style="color:#5a7aaa">ℹ️ Elemento em contacto com o solo: U calculado sem Rse; sem requisito de Umáx (o cálculo pelo terreno é feito na folha, EN 13370).</div>`;
 
+  // Pormenor (corte)
+  if (calc.camadas.length) {
+    head += `<div class="tm-sub">Pormenor (corte)</div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">
+        <div style="flex:0 1 480px">${tmSVG(s, calc, 'ed')}</div>
+        <div style="flex:1;min-width:200px;color:#d0d6e8">
+          <div style="font-size:11px;color:#5a7aaa;text-transform:uppercase;letter-spacing:.5px">Legenda</div>
+          ${tmLegenda(calc)}
+          <div class="tm-btns"><button class="tm-btn tm-btn-sec" onclick="tmDownloadSVG()">⬇ Descarregar SVG</button></div>
+        </div>
+      </div>`;
+  }
+
   // Texto descritivo
   head += `<div class="tm-sub">Texto descritivo</div>
     <textarea class="tm-texto" id="tm-texto" readonly>${calc.camadas.length ? tmTexto(s, calc) : ''}</textarea>
@@ -660,6 +674,268 @@ function tmCopiarTexto() {
     () => { const b = event.target; const o = b.textContent; b.textContent = '✓ Copiado'; setTimeout(() => b.textContent = o, 1500); },
     () => { ta.select(); document.execCommand('copy'); }
   );
+}
+
+// ═══════════════════════════════════════════════════
+// DESENHO DE PORMENOR (SVG)
+// ═══════════════════════════════════════════════════
+
+// Tramas por material — devolve {defs, fill} para um dado uid único
+// (uid evita colisões de ids quando há vários SVG na mesma página)
+function tmTrama(c, uid, n) {
+  const id = `tm${uid}p${n}`;
+  const cat = c.cat || '';
+  const nome = (c.nome || '').toLowerCase();
+
+  // tijolo (cerâmico / térmico): aparelho de tijolo laranja
+  if (nome.includes('tijolo')) {
+    return { fill: `url(#${id})`, defs: `<pattern id="${id}" width="22" height="14" patternUnits="userSpaceOnUse">
+      <rect width="22" height="14" fill="#E2794A"/>
+      <path d="M0 0 H22 M0 7 H22 M0 14 H22" stroke="#fff" stroke-width="1.6"/>
+      <path d="M6 0 V7 M17 7 V14" stroke="#fff" stroke-width="1.6"/></pattern>` };
+  }
+  // blocos de betão: blocos cinza
+  if (nome.includes('blocos')) {
+    return { fill: `url(#${id})`, defs: `<pattern id="${id}" width="26" height="16" patternUnits="userSpaceOnUse">
+      <rect width="26" height="16" fill="#C9CDD1"/>
+      <path d="M0 0 H26 M0 8 H26 M0 16 H26" stroke="#fff" stroke-width="1.6"/>
+      <path d="M8 0 V8 M20 8 V16" stroke="#fff" stroke-width="1.6"/></pattern>` };
+  }
+  // isolamentos: quadrícula azul (estilo XPS)
+  if (cat === 'Isolamentos' || nome.includes('reboco térmico')) {
+    return { fill: `url(#${id})`, defs: `<pattern id="${id}" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#9FD8F5"/>
+      <path d="M0 8 L8 0 M-2 2 L2 -2 M6 10 L10 6" stroke="#2E9FD8" stroke-width="1"/>
+      <path d="M0 0 L8 8 M-2 6 L2 10 M6 -2 L10 2" stroke="#2E9FD8" stroke-width="1"/></pattern>` };
+  }
+  // betão armado / betonilha / betões: salpico
+  if (nome.includes('betão') || nome.includes('betonilha') || nome.includes('laje')) {
+    const dots = '<circle cx="6" cy="8" r="1.1"/><circle cx="20" cy="22" r="1.1"/><circle cx="30" cy="6" r="1.1"/><circle cx="12" cy="30" r="1.1"/><circle cx="33" cy="33" r="1.1"/><circle cx="24" cy="14" r="0.8"/><circle cx="3" cy="24" r="0.8"/>';
+    const tris = '<path d="M14 4 l3 4 h-6 z"/><path d="M28 26 l3 4 h-6 z"/>';
+    const voids = nome.includes('aligeirada') ? '<circle cx="10" cy="18" r="5" fill="#fff" stroke="#8a8a8a" stroke-width="0.8"/><circle cx="28" cy="18" r="5" fill="#fff" stroke="#8a8a8a" stroke-width="0.8"/>' : '';
+    return { fill: `url(#${id})`, defs: `<pattern id="${id}" width="38" height="38" patternUnits="userSpaceOnUse">
+      <rect width="38" height="38" fill="#DCDCDC"/><g fill="#8a8a8a">${dots}${tris}</g>${voids}</pattern>` };
+  }
+  // madeiras: veios
+  if (cat === 'Madeiras') {
+    return { fill: `url(#${id})`, defs: `<pattern id="${id}" width="30" height="12" patternUnits="userSpaceOnUse">
+      <rect width="30" height="12" fill="#D9A86C"/>
+      <path d="M0 3 Q8 1.5 15 3 T30 3 M0 8 Q10 6.5 18 8 T30 8" stroke="#A87B45" stroke-width="0.9" fill="none"/></pattern>` };
+  }
+  // pedra natural / revestimento em pedra / cantaria: diagonal
+  if (cat === 'Pedra natural' || nome.includes('pedra') || nome.includes('cantaria')) {
+    return { fill: `url(#${id})`, defs: `<pattern id="${id}" width="9" height="9" patternUnits="userSpaceOnUse">
+      <rect width="9" height="9" fill="#CFCFC7"/>
+      <path d="M0 9 L9 0 M-2 2 L2 -2 M7 11 L11 7" stroke="#84847C" stroke-width="1"/></pattern>` };
+  }
+  // caixa de ar: vazio
+  if (nome.includes('caixa de ar')) return { fill: '#FFFFFF', defs: '' };
+  // metais
+  if (nome.includes('aço') || nome.includes('alumínio') || nome.includes('zinco')) {
+    return { fill: '#B8BEC6', defs: '' };
+  }
+  // membranas: escuro
+  if (nome.includes('membrana')) return { fill: '#4A4A4A', defs: '' };
+  // seixo: bolinhas
+  if (nome.includes('seixo')) {
+    return { fill: `url(#${id})`, defs: `<pattern id="${id}" width="16" height="12" patternUnits="userSpaceOnUse">
+      <rect width="16" height="12" fill="#E8E4DA"/>
+      <ellipse cx="4" cy="4" rx="2.6" ry="1.9" fill="none" stroke="#9A948A" stroke-width="0.9"/>
+      <ellipse cx="12" cy="9" rx="2.6" ry="1.9" fill="none" stroke="#9A948A" stroke-width="0.9"/></pattern>` };
+  }
+  // cerâmico (revestimento)
+  if (nome.includes('cerâmico')) return { fill: '#B0522D', defs: '' };
+  // gesso cartonado
+  if (nome.includes('gesso')) return { fill: '#F0E2C8', defs: '' };
+  // rebocos / estuques / etic
+  if (nome.includes('reboco') || nome.includes('estuque') || nome.includes('etic') || nome.includes('flutuante')) {
+    return { fill: '#EFE9DC', defs: '' };
+  }
+  // por defeito: cinza claro com diagonal suave
+  return { fill: `url(#${id})`, defs: `<pattern id="${id}" width="10" height="10" patternUnits="userSpaceOnUse">
+    <rect width="10" height="10" fill="#E4E4E4"/>
+    <path d="M0 10 L10 0" stroke="#B0B0B0" stroke-width="0.8"/></pattern>` };
+}
+
+// Gera o SVG do corte de uma solução
+// Paredes: corte horizontal (exterior à esquerda) | coberturas: ext em cima | pavimentos: ext em baixo
+function tmSVG(sol, calc, uid) {
+  const t = TM_TIPOS[sol.tipo];
+  if (!calc.camadas.length) return '';
+  const V = t.orient === 'V';
+  const ALVO = V ? 380 : 300;          // extensão total do corte em px
+  const MIN = 9;                        // espessura mínima visível de uma camada
+  const SEC = V ? 190 : 320;            // dimensão transversal da secção
+
+  // larguras proporcionais com mínimo
+  const esc = ALVO / (calc.esp || 0.01);
+  const dims = calc.camadas.map(c => Math.max(c.e * esc, MIN));
+  const total = dims.reduce((a, b) => a + b, 0);
+
+  let defs = '', corpo = '', numeros = '', cotas = '';
+  const M = { l: 56, r: 56, t: 34, b: 46 };  // margens
+  let pos = 0;
+
+  calc.camadas.forEach((c, i) => {
+    const tr = tmTrama(c, uid, i);
+    defs += tr.defs;
+    const d = dims[i];
+    if (V) {
+      const x = M.l + pos;
+      corpo += `<rect x="${x}" y="${M.t}" width="${d}" height="${SEC}" fill="${tr.fill}" stroke="#3a3a3a" stroke-width="1"/>`;
+      // número no topo
+      const cx = x + d / 2;
+      numeros += `<line x1="${cx}" y1="${M.t - 6}" x2="${cx}" y2="${M.t}" stroke="#666" stroke-width="0.8"/>
+        <circle cx="${cx}" cy="${M.t - 15}" r="8.5" fill="#fff" stroke="#333" stroke-width="1"/>
+        <text x="${cx}" y="${M.t - 11.5}" text-anchor="middle" font-size="10" font-family="DM Sans, sans-serif" fill="#111">${i + 1}</text>`;
+      // cota da camada
+      const cy = M.t + SEC + 14;
+      cotas += `<line x1="${x}" y1="${cy}" x2="${x + d}" y2="${cy}" stroke="#666" stroke-width="0.8"/>
+        <line x1="${x}" y1="${cy - 3}" x2="${x}" y2="${cy + 3}" stroke="#666" stroke-width="0.8"/>
+        <line x1="${x + d}" y1="${cy - 3}" x2="${x + d}" y2="${cy + 3}" stroke="#666" stroke-width="0.8"/>
+        <text x="${cx}" y="${cy + 12}" text-anchor="middle" font-size="9" font-family="DM Sans, sans-serif" fill="#444">${tmFmtCm(c.e)}</text>`;
+      pos += d;
+    } else {
+      // empilhado: cobertura ext em cima (ordem dada), pavimento ext em baixo (inverter posição)
+      const idxPos = sol.tipo.startsWith('PV') ? (total - pos - dims[i]) : pos;
+      const y = M.t + idxPos;
+      corpo += `<rect x="${M.l}" y="${y}" width="${SEC}" height="${d}" fill="${tr.fill}" stroke="#3a3a3a" stroke-width="1"/>`;
+      const cy = y + d / 2;
+      numeros += `<line x1="${M.l - 6}" y1="${cy}" x2="${M.l}" y2="${cy}" stroke="#666" stroke-width="0.8"/>
+        <circle cx="${M.l - 16}" cy="${cy}" r="8.5" fill="#fff" stroke="#333" stroke-width="1"/>
+        <text x="${M.l - 16}" y="${cy + 3.5}" text-anchor="middle" font-size="10" font-family="DM Sans, sans-serif" fill="#111">${i + 1}</text>`;
+      const cx2 = M.l + SEC + 14;
+      cotas += `<line x1="${cx2}" y1="${y}" x2="${cx2}" y2="${y + d}" stroke="#666" stroke-width="0.8"/>
+        <line x1="${cx2 - 3}" y1="${y}" x2="${cx2 + 3}" y2="${y}" stroke="#666" stroke-width="0.8"/>
+        <line x1="${cx2 - 3}" y1="${y + d}" x2="${cx2 + 3}" y2="${y + d}" stroke="#666" stroke-width="0.8"/>
+        <text x="${cx2 + 8}" y="${cy + 3}" font-size="9" font-family="DM Sans, sans-serif" fill="#444">${tmFmtCm(c.e)}</text>`;
+      pos += d;
+    }
+  });
+
+  let rotulos = '', W, H;
+  if (V) {
+    W = M.l + total + M.r; H = M.t + SEC + M.b;
+    const my = M.t + SEC / 2;
+    rotulos = `<text x="${M.l - 10}" y="${my}" text-anchor="end" font-size="11" font-style="italic" font-family="DM Sans, sans-serif" fill="#555">${t.front === 'int' ? 'enu' : 'exterior'}</text>
+      <text x="${M.l + total + 10}" y="${my}" font-size="11" font-style="italic" font-family="DM Sans, sans-serif" fill="#555">interior</text>
+      <text x="${M.l + total / 2}" y="${M.t + SEC + 40}" text-anchor="middle" font-size="10" font-family="DM Sans, sans-serif" fill="#333">espessura total: ${tmFmtCm(calc.esp)} cm</text>`;
+  } else {
+    W = M.l + SEC + M.r + 10; H = M.t + total + M.b;
+    const extCima = !sol.tipo.startsWith('PV');
+    const labExt = t.front === 'int' ? 'enu' : 'exterior';
+    rotulos = `<text x="${M.l + SEC / 2}" y="${M.t - 10}" text-anchor="middle" font-size="11" font-style="italic" font-family="DM Sans, sans-serif" fill="#555">${extCima ? labExt : 'interior'}</text>
+      <text x="${M.l + SEC / 2}" y="${M.t + total + 18}" text-anchor="middle" font-size="11" font-style="italic" font-family="DM Sans, sans-serif" fill="#555">${extCima ? 'interior' : labExt}</text>
+      <text x="${M.l + SEC / 2}" y="${M.t + total + 36}" text-anchor="middle" font-size="10" font-family="DM Sans, sans-serif" fill="#333">espessura total: ${tmFmtCm(calc.esp)} cm</text>`;
+  }
+
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;background:#fff;border-radius:8px">
+    <defs>${defs}</defs>
+    <rect x="0" y="0" width="${W}" height="${H}" fill="#fff"/>
+    ${corpo}${numeros}${cotas}${rotulos}</svg>`;
+}
+
+// Legenda numerada (HTML) para acompanhar o desenho
+function tmLegenda(calc) {
+  return '<ol style="margin:8px 0 0;padding-left:22px;font-size:12px;line-height:1.6">' +
+    calc.camadas.map(c => `<li>${c.nome} — ${tmFmtCm(c.e)} cm</li>`).join('') + '</ol>';
+}
+
+// Descarregar o SVG da solução em edição
+function tmDownloadSVG() {
+  const s = tmSol();
+  const calc = tmCalcular(s, tmState.zona, tmState.tipoEd);
+  const svg = tmSVG(s, calc, 'dl');
+  if (!svg) return;
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${s.codigo}.svg`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ─── Caderno de soluções (imprimir / PDF) ───
+function tmImprimirCaderno() {
+  if (!tmState.solucoes.length) { alert('Não há soluções para imprimir.'); return; }
+  const proj = currentProject ? currentProject.nome : '';
+  let corpo = '';
+  tmState.solucoes.forEach((s, i) => {
+    const calc = tmCalcular(s, tmState.zona, tmState.tipoEd);
+    const t = TM_TIPOS[s.tipo];
+    const nome = s.ptp ? `Ponte Térmica Plana ${t.front === 'int' ? 'Interior' : 'Exterior'}, tipo ${s.ptpSubtipo || 'pilar'}` : t.nome;
+    const linhas = calc.camadas.map((c, j) => `<tr>
+      <td>${j + 1}</td><td>${c.nome}</td><td class="n">${tmFmtCm(c.e)}</td>
+      <td class="n">${c.usaLambda ? tmFmt(c.lambda, 3) : '—'}</td>
+      <td class="n">${tmFmt(c.R, 3)}</td><td class="n">${tmFmt(c.massa, 1)}</td></tr>`).join('');
+    let cumpre;
+    if (calc.incompleto) cumpre = 'dados em falta';
+    else if (calc.cumpre === true) cumpre = 'SIM';
+    else if (calc.cumpre === false) cumpre = 'NÃO';
+    else cumpre = '—';
+    corpo += `
+    <section class="sol">
+      <h2>${s.codigo} — ${nome}</h2>
+      <div class="linha-fig">
+        <div class="fig">${tmSVG(s, calc, 'pr' + i)}</div>
+        <div class="leg"><div class="leg-t">Constituição (do ${t.front === 'int' ? 'ENU' : 'exterior'} para o interior)</div>${tmLegenda(calc)}</div>
+      </div>
+      <table class="tab">
+        <thead><tr><th></th><th>Material</th><th>e (cm)</th><th>λ [W/(m·°C)]</th><th>R [(m²·°C)/W]</th><th>Massa (kg/m²)</th></tr></thead>
+        <tbody>${linhas}</tbody>
+      </table>
+      <table class="res">
+        <tr><td>Coeficiente de transmissão térmica, U</td><td class="n">${tmFmt(calc.U, 2)} W/(m²·°C)</td>
+            <td>Espessura total</td><td class="n">${tmFmtCm(calc.esp)} cm</td></tr>
+        <tr><td>U<sub>máx</sub> (zona ${tmState.zona} — ${calc.umax.label})</td><td class="n">${calc.umax.valor != null ? tmFmt(calc.umax.valor, 2) + ' W/(m²·°C)' : '—'}</td>
+            <td>Massa superficial útil</td><td class="n">${tmFmt(calc.massa, 1)} kg/m²</td></tr>
+        <tr><td>Cumpre o requisito?</td><td class="n"><strong>${cumpre}</strong></td><td></td><td></td></tr>
+      </table>
+      <p class="txt">${calc.camadas.length ? tmTexto(s, calc) : ''}</p>
+    </section>`;
+  });
+
+  const html = `<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8"/>
+  <title>Soluções Construtivas${proj ? ' — ' + proj : ''}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Calibri, sans-serif; color: #1a1a1a; margin: 0; padding: 24px 34px; font-size: 12px; }
+    header.doc { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1E8AFF; padding-bottom: 8px; margin-bottom: 6px; }
+    header.doc .t1 { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
+    header.doc .t1 span { color: #1E8AFF; }
+    header.doc .t2 { font-size: 11px; color: #555; }
+    .meta { font-size: 11px; color: #555; margin-bottom: 16px; }
+    section.sol { page-break-inside: avoid; margin-bottom: 26px; border: 1px solid #ccc; border-radius: 6px; padding: 14px 18px; }
+    h2 { font-size: 14px; margin: 0 0 10px; color: #0a2a52; }
+    .linha-fig { display: table; width: 100%; margin-bottom: 10px; }
+    .fig { display: table-cell; width: 58%; vertical-align: top; padding-right: 16px; }
+    .fig svg { width: 100%; height: auto; border: 1px solid #ddd; }
+    .leg { display: table-cell; vertical-align: top; }
+    .leg-t { font-size: 11px; font-weight: 600; color: #555; margin-bottom: 2px; }
+    table.tab { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    table.tab th { text-align: left; font-size: 10px; color: #555; border-bottom: 1px solid #999; padding: 3px 6px; }
+    table.tab td { padding: 3px 6px; border-bottom: 1px solid #e0e0e0; }
+    table.res { width: 100%; border-collapse: collapse; margin-bottom: 8px; background: #f4f7fb; }
+    table.res td { padding: 4px 8px; font-size: 11px; }
+    td.n { font-family: Consolas, monospace; white-space: nowrap; }
+    p.txt { font-size: 11px; line-height: 1.55; text-align: justify; background: #fafafa; border-left: 3px solid #1E8AFF; padding: 8px 12px; margin: 0; }
+    svg, .fig, section.sol { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { size: A4; margin: 0; } /* margem 0 = o browser não imprime URL/data/página */
+    @media print { body { padding: 14mm 16mm; } section.sol { border-color: #bbb; } }
+  </style></head><body>
+  <header class="doc">
+    <div class="t1">ALIOS <span>ONE</span> — Soluções Construtivas</div>
+    <div class="t2">Portaria n.º 138-I/2021 · Zona climática ${tmState.zona} · ${tmState.tipoEd === 'hab' ? 'Habitação' : 'Comércio e serviços'}</div>
+  </header>
+  <div class="meta">${proj ? 'Projecto: <strong>' + proj + '</strong> · ' : ''}${new Date().toLocaleDateString('pt-PT')}</div>
+  ${corpo}
+  <script>window.onload = () => setTimeout(() => window.print(), 400);<\/script>
+  </body></html>`;
+
+  const w = window.open('', '_blank');
+  if (!w) { alert('O browser bloqueou a janela. Permite pop-ups para imprimir.'); return; }
+  w.document.write(html);
+  w.document.close();
 }
 
 // ─── Registo da ferramenta ───
