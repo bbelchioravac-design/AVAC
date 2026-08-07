@@ -17,6 +17,7 @@ const AREAS=[
   {id:'termica',icon:'🌡️',name:'Comportamento Térmico',desc:'Envolventes, pontes térmicas, condensações',active:false,tools:[]},
   {id:'desenfumagem',icon:'🔥',name:'Desenfumagem',desc:'Caudais, pressurização, condutas de desenfumagem',active:false,tools:[]},
   {id:'incendio',icon:'🧯',name:'Segurança contra Incêndio',desc:'Cargas de incêndio, meios de extinção',active:false,tools:[]},
+  {id:'gtc',icon:'🎛️',name:'Gestão Técnica',desc:'Listas de pontos GTC/SACE, verificação 138-I',active:false,tools:[]},
 ];
 
 // Função para módulos registarem ferramentas
