@@ -178,6 +178,14 @@ function iniciarArNovo() {
 // ─── Ramo habitação ───
 function anHabitacao() {
   anState.ramo = 'habitacao';
+  addBot('Método rápido (Rph 0,5 × volume) ou a <strong>folha LNEC completa</strong> (Rph estimada por balanço de pressões, com relatório)?');
+  addPills([
+    { label: 'Rápido — caudal alvo', action: anHabitacaoRapido },
+    { label: '🌬️ Folha LNEC completa', action: iniciarRv }
+  ]);
+}
+
+function anHabitacaoRapido() {
   setProgress(30);
   addBot('Habitação: exige-se <strong>Rph ≥ 0,50 h⁻¹</strong> (Tabela 10 da Portaria 138-I/2021, EN 16798-1).<br>Indica a área e o pé-direito médio para obteres o caudal alvo.');
   const row = document.createElement('div'); row.className = 'bot-row';
