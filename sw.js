@@ -1,4 +1,4 @@
-const CACHE_NAME = 'alios-calculos-v51';
+const CACHE_NAME = 'alios-calculos-v52';
 const ASSETS = [
   './',
   './index.html',
@@ -12,6 +12,7 @@ const ASSETS = [
   './js/tubagens.js',
   './js/vasos.js',
   './js/aquecimento.js',
+  './js/hottes.js',
   './js/ar_novo.js',
   './js/clinicas.js',
   './js/incendio.js',
