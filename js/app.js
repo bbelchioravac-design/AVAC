@@ -362,6 +362,9 @@ function exportarExcel() {
     XLSX.utils.book_append_sheet(wb, wsP, 'Pressupostos');
   }
 
+  // Sheet: Fotovoltaico NT-SCE-01 (fotovoltaico.js)
+  if (typeof pvFolhaExcel === 'function') pvFolhaExcel(wb, marcados);
+
   const nomeFile = currentProject ? currentProject.nome.replace(/[^a-zA-Z0-9À-ÿ\s-]/g, '').trim() : 'ALIOS_Calculos';
   XLSX.writeFile(wb, `${nomeFile} - Cálculos.xlsx`);
 }
