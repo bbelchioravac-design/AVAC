@@ -705,7 +705,7 @@ function qeMostrarComando() {
   const svg = qeSVGComando();
   addBot(`<div class="qe-eq-tit">🔌 Esquema de comando</div><div class="qe-svg-wrap">${svg}</div><span class="dim">Comando v0.1 — só as máquinas comandadas pelo QE (${cmd.map(c => c.nome).join(', ')}).</span>`);
   addPills([
-    { label: '⬇ Descarregar SVG (comando)', action: () => {
+    { label: '⬇ Descarregar SVG (comando)', mantem: true, action: () => {
       const blob = new Blob([qeSVGComando()], { type: 'image/svg+xml' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -722,7 +722,7 @@ function qeMostrarUnifilar() {
   addBot(`<div class="qe-eq-tit">📐 Esquema de princípio</div><div class="qe-svg-wrap">${svg}</div><span class="dim">Bonecada v0.1 — símbolos da casa em estreia. Arrasta para o lado se não couber.</span>`);
   addPills([
     { label: '🔌 Ver esquema de comando', action: () => qeMostrarComando() },
-    { label: '⬇ Descarregar SVG', action: () => {
+    { label: '⬇ Descarregar SVG', mantem: true, action: () => {
       const blob = new Blob([qeSVGUnifilar()], { type: 'image/svg+xml' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);

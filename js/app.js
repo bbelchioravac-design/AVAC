@@ -180,8 +180,10 @@ function addPills(pills) {
     btn.className = 'pill-btn';
     btn.textContent = p.label;
     btn.onclick = () => {
-      wrap.querySelectorAll('.pill-btn').forEach(x => x.disabled = true);
-      addUser(p.label);
+      if (!p.mantem) { // pills c/ mantem:true não consomem a fila (ex.: downloads) [v 09/09/2026]
+        wrap.querySelectorAll('.pill-btn').forEach(x => x.disabled = true);
+        addUser(p.label);
+      }
       p.action();
     };
     wrap.appendChild(btn);
