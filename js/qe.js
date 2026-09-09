@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════
 // ALIOS ONE — Módulo Electricidade AVAC
-// qe.js — Compositor de Sistema (v0.4 — CDI no comando + condensadora DX dedicada nas UTAs [BB+Vasco 09/09/2026])
+// qe.js — Compositor de Sistema (v0.5 — + UIs por circuito à escolha [BB+Vasco 09/09/2026])
 //
 // A ferramenta-índice: perguntas → blocos (parque_blocos.js)
 // → características por equipamento → etiquetas de saída à
@@ -59,6 +59,7 @@ const QE_CARACT = {
     { id: 'pn', q: 'Potência ELÉCTRICA da UE (kW)?', tipo: 'num' },
     { id: 'fase', q: 'UE monofásica ou trifásica?', pills: [{ v: 'mono', label: 'Mono' }, { v: 'tri', label: 'Tri' }] },
     { id: 'nuis', q: 'Quantas UIs?', tipo: 'num' },
+    { id: 'gr', q: 'Quantas UIs por circuito? <span class="dim">(máx. escola: 5 — mas o desenho manda; ex.: 4+4)</span>', tipo: 'num', so_se: d => d.nuis > 1 },
     { id: 'in', q: 'In de chapa da UE (A)? <span class="dim">(0 = calculo eu)</span>', tipo: 'num' },
   ],
   bc_reversivel: [
@@ -163,7 +164,7 @@ function qeEtiquetaSaida(inst) {
     if (qeTemContagem(d.pn)) linhas.push(`<span class="dim">   ⚡ >12 kW el. + PC>30 → CONTAGEM permanente neste circuito [LEI 138-I Tab.18, pág.22]</span>`);
     if (qeSemGTC()) linhas.push(`<span class="dim">   💡 sem GTC (PC<100): alarme geral da UE em LÂMPADA no QE (contacto seco) [prática gtc_regras]</span>`);
     // UIs em grupos de <=5 por circuito [ESCOLA NCH: VC1 a VC5]
-    qeGruposUIs(d.nuis).forEach(g => {
+    qeGruposUIs(d.nuis, d.gr).forEach(g => {
       linhas.push(`${inst.nome} (UI ${g}) | 3G2,5 - 16A + dif. 25A tipo A <span class="dim">(agrupar por piso na prática)</span>`);
     });
   } else if (inst.tipo === 'bc_reversivel') {
@@ -429,7 +430,7 @@ function qeCircuitos() {
       }
     } else if (inst.tipo === 'vrf') {
       circ.push({ nome: inst.nome + ' UE', fase, cadeia: ['disj', 'dif'], prot: qeDisj(inA), dif: fase === 'tri' ? 'B' : 'F', carga: 'caixa', cargaTxt: 'VRF', info: [`${d.pn} kW · ${inTxt}`, qeCaboTxt(inst)], cont: qeTemContagem(d.pn) });
-      qeGruposUIs(d.nuis).forEach(g => {
+      qeGruposUIs(d.nuis, d.gr).forEach(g => {
         circ.push({ nome: `${inst.nome} UI ${g}`, fase: 'mono', cadeia: ['disj', 'dif'], prot: '16A', dif: 'A', carga: 'caixa', cargaTxt: 'UIs', info: [`UI ${g}`, '3G2,5'] });
       });
     } else if (inst.tipo === 'bc_reversivel') {
@@ -443,9 +444,10 @@ function qeCircuitos() {
 }
 
 // UIs em grupos de <=5 por circuito [ESCOLA NCH: "VC1 a VC5"] → ["1-5","6-10",...]
-function qeGruposUIs(n) {
+function qeGruposUIs(n, per) {
+  const p = Math.max(1, Math.min(8, Math.round(per) || 5)); // default escola: 5
   const g = [];
-  for (let i = 1; i <= n; i += 5) g.push(`${i}-${Math.min(i + 4, n)}`);
+  for (let i = 1; i <= n; i += p) g.push(`${i}-${Math.min(i + p - 1, n)}`);
   return g;
 }
 
