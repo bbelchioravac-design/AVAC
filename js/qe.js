@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════
 // ALIOS ONE — Módulo Electricidade AVAC
-// qe.js — Compositor de Sistema (v0.5 — + UIs por circuito à escolha [BB+Vasco 09/09/2026])
+// qe.js — Compositor de Sistema (v0.6 — + exportação DXF dos esquemas [BB+Vasco 09/09/2026])
 //
 // A ferramenta-índice: perguntas → blocos (parque_blocos.js)
 // → características por equipamento → etiquetas de saída à
@@ -712,6 +712,7 @@ function qeMostrarComando() {
       a.download = 'qe_avac_comando.svg';
       a.click();
     } },
+    { label: '⬇ DXF (comando)', mantem: true, action: () => qeDescarregarDXF(qeSVGComando, 'qe_avac_comando.dxf') },
     { label: '🔁 Compor outro sistema', action: () => iniciarCompositorQE() },
     { label: '← Ferramentas', action: () => { modo = null; showToolMenu(currentArea); } },
   ]);
@@ -729,6 +730,7 @@ function qeMostrarUnifilar() {
       a.download = 'qe_avac_unifilar.svg';
       a.click();
     } },
+    { label: '⬇ DXF', mantem: true, action: () => qeDescarregarDXF(qeSVGUnifilar, 'qe_avac_unifilar.dxf') },
     { label: '🔁 Compor outro sistema', action: () => iniciarCompositorQE() },
     { label: '← Ferramentas', action: () => { modo = null; showToolMenu(currentArea); } },
   ]);
