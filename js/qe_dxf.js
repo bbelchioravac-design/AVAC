@@ -23,6 +23,9 @@ function qeSVGparaDXF(svg) {
   };
   const text = (x, y, t, h, anc) => {
     t = t.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+    // CP1252: traduzir o que lá não mora (acentos PT moram; setas e afins não)
+    t = t.replace(/—|–/g, '-').replace(/→/g, '->').replace(/·/g, '.').replace(/≤/g, '<=').replace(/≥/g, '>=')
+         .replace(/[⚡💡🔥⬇✓]/g, '').replace(/[^\u0000-\u00FF]/g, '?').trim();
     const j = anc === 'middle' ? '1' : (anc === 'end' ? '2' : '0');
     e.push('0','TEXT','8','QE-AVAC-TXT','10',N(x),'20',Y(y),'40',N(h),'1',t);
     if (j !== '0') e.push('72',j,'11',N(x),'21',Y(y));
@@ -62,12 +65,16 @@ function qeSVGparaDXF(svg) {
     }
   }
 
-  return ['0','SECTION','2','ENTITIES', ...e, '0','ENDSEC','0','EOF',''].join('\n');
+  return ['0','SECTION','2','HEADER','9','$ACADVER','1','AC1009','9','$DWGCODEPAGE','3','ANSI_1252','0','ENDSEC',
+          '0','SECTION','2','ENTITIES', ...e, '0','ENDSEC','0','EOF',''].join('\n');
 }
 
 function qeDescarregarDXF(svgFn, nome) {
   const dxf = qeSVGparaDXF(svgFn());
-  const blob = new Blob([dxf], { type: 'application/dxf' });
+  // bytes em ANSI/latin-1 (o AutoCAD lê R12 pela codepage, não em UTF-8)
+  const bytes = new Uint8Array(dxf.length);
+  for (let i = 0; i < dxf.length; i++) { const c = dxf.charCodeAt(i); bytes[i] = c <= 255 ? c : 63; }
+  const blob = new Blob([bytes], { type: 'application/dxf' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = nome;
