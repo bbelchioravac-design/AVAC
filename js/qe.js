@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════
 // ALIOS ONE — Módulo Electricidade AVAC
-// qe.js — Compositor de Sistema (v0.2)
+// qe.js — Compositor de Sistema (v0.3 — sinal CDI no comando [BB+Vasco 09/09/2026])
 //
 // A ferramenta-índice: perguntas → blocos (parque_blocos.js)
 // → características por equipamento → etiquetas de saída à
@@ -189,7 +189,7 @@ function qePergunta() {
     break;
   }
   const p = PARQUE_PERGUNTAS[qeState.pIdx];
-  if (!p) { qePrepararCaract(); return; }
+  if (!p) { qePerguntaCDI(); return; }
   setProgress(Math.round(30 * qeState.pIdx / PARQUE_PERGUNTAS.length));
   addBot(p.texto);
   addPills(p.opcoes.map(o => ({
@@ -202,6 +202,16 @@ function qePergunta() {
       qePergunta();
     },
   })));
+}
+
+// ─── Fase 1b: sinal externo da CDI [Vasco 09/09/2026, pedido BB] ───
+function qePerguntaCDI() {
+  if (qeState.parametros.cdi !== undefined) { qePrepararCaract(); return; }
+  addBot('O edifício tem <b>CDI/SADI</b> (corte do AVAC por incêndio)? 🔥<br><span class="dim">Se sim, desenho o relé KI no comando: contacto NF da central alimenta a bobina — em alarme (ou fio cortado) o relé cai e derruba os KM todos. Fail-safe.</span>');
+  addPills([
+    { label: 'Sim, com corte AVAC', action: () => { qeState.parametros.cdi = true; qePrepararCaract(); } },
+    { label: 'Não / não aplicável', action: () => { qeState.parametros.cdi = false; qePrepararCaract(); } },
+  ]);
 }
 
 // ─── Fase 2: expandir sistemas e perguntar quantidades ───
@@ -314,6 +324,8 @@ function qeRelatorio() {
     sh += '</ul>';
     addBot(sh);
   });
+
+  if (qeState.parametros.cdi) addBot('🔥 <b>CDI ligada ao QE:</b> bornes X-CDI (contacto NF da central, abre em alarme) → relé KI → corte de todos os KM + lâmpada PARAGEM INCÊNDIO. Cabo da central ao quadro: pela especialidade SCI (2×1,5 ou conforme projecto). As máquinas c/ controlador de fabricante levam ordem de paragem por contacto seco próprio (não passa pelo KI).');
 
   // ⚡ ETIQUETAS DE SAÍDA (o entregável novo da v0.2)
   if (comMaquinas) {
@@ -529,7 +541,8 @@ function qeSVGComando() {
   const todos = qeCircuitos();
   const cmd = todos.filter(c => c.cadeia.includes('km'));
   const temRelogio = cmd.some(c => c.relogio && !c.nome.includes('res.'));
-  const GRUPO = 210, X0 = temRelogio ? 260 : 90;
+  const temCDI = !!(qeState && qeState.parametros.cdi);
+  const GRUPO = 210, X0 = 90 + (temRelogio ? 170 : 0) + (temCDI ? 200 : 0);
   const LARG = X0 + cmd.length * GRUPO + 30, ALT = 470;
   const YL = 110, YN = 380; // barras
   let s = '';
@@ -569,6 +582,37 @@ function qeSVGComando() {
     ln(190, YL, 190, YN, 0.7); // separador
   }
 
+  // cabeça: CDI → relé KI [fail-safe: NF da central alimenta a bobina;
+  // alarme OU fio partido → KI cai → KMs caem] [Vasco 09/09/2026]
+  if (temCDI) {
+    const x = (temRelogio ? 280 : 110), xL = x + 85;
+    let y = YL;
+    ln(x, YL, x, y += 22);
+    // bornes da central (X-CDI)
+    s += `<circle cx="${x}" cy="${y + 5}" r="4" fill="none" stroke="#111" stroke-width="1.4"/>`;
+    txt(x + 10, y + 9, 'X-CDI.1', 8, 'start');
+    y += 10; ln(x, y, x, y += 10);
+    simb('int_fechado', x, y, 24);
+    txt(x + 9, y + 14, 'CDI (NF — abre em alarme)', 8, 'start');
+    y += 24; ln(x, y, x, y += 8);
+    s += `<circle cx="${x}" cy="${y + 5}" r="4" fill="none" stroke="#111" stroke-width="1.4"/>`;
+    txt(x + 10, y + 9, 'X-CDI.2', 8, 'start');
+    y += 10; ln(x, y, x, y + 88); y += 88;
+    y = bobina(x, y, 'KI');
+    ln(x, y, x, YN);
+    txt(x, YN + 30, 'CDI → relé KI', 9, 'middle', true);
+    txt(x, YN + 42, '(excitado em serviço)', 8.5);
+    // lâmpada PARAGEM INCÊNDIO: contacto NF do KI (acende qd KI cai)
+    ln(xL, YL, xL, YL + 40);
+    simb('int_fechado', xL, YL + 40, 24); txt(xL + 7, YL + 54, 'KI 21-22', 8, 'start');
+    ln(xL, YL + 64, xL, YN - 46);
+    simb('lamp_verm', xL, YN - 46, 34, '#c01414');
+    ln(xL, YN - 12, xL, YN);
+    txt(xL, YN + 14, 'PARAGEM', 8, 'middle', true);
+    txt(xL, YN + 24, 'INCÊNDIO', 8, 'middle', true);
+    ln(X0 - 35, YL, X0 - 35, YN, 0.7); // separador
+  }
+
   cmd.forEach((c, i) => {
     const x = X0 + i * GRUPO, xE = x + 70, xA = x + 125;
     const solar = c.nome.includes('res.');
@@ -591,6 +635,12 @@ function qeSVGComando() {
       simb('int_aberto', x, y, 24);
       const rot = solar ? 'IH (noite)' : (c.cmdTipo === 'sonda' ? 'sonda' : 'KH1 13-14');
       txt(x + 8, y + 14, rot, 8.5, 'start');
+      y += 24; ln(x, y, x, y += 12);
+    }
+    // corte de incêndio: KI 13-14 em série (fecha c/ KI excitado) [fail-safe]
+    if (temCDI) {
+      simb('int_aberto', x, y, 24);
+      txt(x + 8, y + 14, 'KI 13-14', 8.5, 'start');
       y += 24; ln(x, y, x, y += 12);
     }
     // encravamento DM em série (só quando há guarda-motor)
@@ -621,6 +671,7 @@ function qeSVGComando() {
     if (i < cmd.length - 1) ln(x + GRUPO - 35, YL, x + GRUPO - 35, YN, 0.7);
   });
 
+  if (temCDI) txt(40, ALT - 44, 'Corte por incêndio: contacto NF da CDI alimenta a bobina KI — em alarme (ou fio cortado) KI cai e derruba todos os KM [fail-safe]. Rearme automático c/ reposição da CDI. Paragens das unidades c/ controlador próprio (UTAN/UCC) seguem por contacto seco dedicado.', 8.5, 'start');
   txt(40, ALT - 30, 'Comando: 230V AC [REGRA DA CASA 07/08] c/ 4 salvaguardas: campo comuta contactos secos · entradas GTC nunca a 230V · nunca misturar tensões no mesmo cabo · protecção própria do comando. 24V só automação/GTC/campo electrónico.', 8.5, 'start');
   txt(40, ALT - 16, 'Bornes de telesinalização Estado/Avaria por máquina (a régua GTC) ficam implícitos — v0.2 desenha-os. Sinalização POR máquina, NUNCA agrupada [REGRA-BB].', 8.5, 'start');
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${LARG}" height="${ALT}" viewBox="0 0 ${LARG} ${ALT}"><rect width="${LARG}" height="${ALT}" fill="#fff"/>${s}</svg>`;
