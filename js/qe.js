@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════
 // ALIOS ONE — Módulo Electricidade AVAC
-// qe.js — Compositor de Sistema (v0.3 — sinal CDI no comando [BB+Vasco 09/09/2026])
+// qe.js — Compositor de Sistema (v0.4 — CDI no comando + condensadora DX dedicada nas UTAs [BB+Vasco 09/09/2026])
 //
 // A ferramenta-índice: perguntas → blocos (parque_blocos.js)
 // → características por equipamento → etiquetas de saída à
@@ -50,6 +50,10 @@ const QE_CARACT = {
     { id: 'fase', q: 'Monofásica ou trifásica?', pills: [{ v: 'mono', label: 'Mono' }, { v: 'tri', label: 'Tri' }] },
     { id: 'ctrl', q: 'Controlo da UTA? <span class="dim">(nos pequenos nem sempre há controlo integrado)</span>', pills: [{ v: 'fab', label: 'Integrado (fabricante)' }, { v: 'qe', label: 'Comandada pelo QE' }] },
     { id: 'in', q: 'In de chapa (A)? <span class="dim">(0 = calculo eu)</span>', tipo: 'num' },
+    { id: 'ue', q: 'Tem <b>unidade condensadora DX dedicada</b> alimentada por este QE? <span class="dim">(bateria de expansão directa c/ UE própria — v0.4)</span>', pills: [{ v: 'sim', label: 'Sim' }, { v: 'nao', label: 'Não' }] },
+    { id: 'ue_pn', q: 'Potência ELÉCTRICA da condensadora (kW)?', tipo: 'num', so_se: d => d.ue === 'sim' },
+    { id: 'ue_fase', q: 'Condensadora mono ou trifásica?', pills: [{ v: 'mono', label: 'Mono' }, { v: 'tri', label: 'Tri' }], so_se: d => d.ue === 'sim' },
+    { id: 'ue_in', q: 'In de chapa da condensadora (A)? <span class="dim">(o MCA; 0 = calculo eu)</span>', tipo: 'num', so_se: d => d.ue === 'sim' },
   ],
   vrf: [
     { id: 'pn', q: 'Potência ELÉCTRICA da UE (kW)?', tipo: 'num' },
@@ -145,6 +149,14 @@ function qeEtiquetaSaida(inst) {
     if (qeTemContagem(d.pn)) linhas.push(`<span class="dim">   ⚡ >12 kW el. + PC>30 → CONTAGEM permanente neste circuito [LEI 138-I Tab.18, pág.22]</span>`);
     if (d.ctrl === 'qe') linhas.push(`<span class="dim">   comandada pelo QE: contactor + relógio/termóstato + Estado em lâmpada (sistema pequeno — a escada desce ao degrau 2)</span>`);
     else if (qeSemGTC()) linhas.push(`<span class="dim">   💡 sem GTC (PC<100): Avaria da UTA repetida em LÂMPADA no QE (contacto seco do fabricante) [REGRA-BB]</span>`);
+    if (d.ue === 'sim') { // condensadora DX dedicada [v0.4]
+      const ueFase = d.ue_fase || 'tri';
+      const ueIn = d.ue_in > 0 ? d.ue_in : qeInCalc(d.ue_pn, ueFase);
+      const ueInTxt = ueIn.toFixed(1) + 'A' + (d.ue_in > 0 ? '' : ' <span class="dim">(calc)</span>');
+      const ueDisj = qeDisj(ueIn);
+      linhas.push(`${inst.nome} (UE — condensadora DX) | Pn el. ${d.ue_pn} kW | In ${ueInTxt} | disjuntor ${ueDisj} + dif. ${qeDifCal(ueDisj)} tipo ${ueFase === 'tri' ? 'B' : 'F'} | ${qeCabo(ueFase, ueFase !== 'mono', qeSeccao(parseFloat(ueDisj) || 16))}`);
+      linhas.push(`<span class="dim">   interligação UTA↔UE (comando do kit de expansão): conforme fabricante — cabo à parte, não passa por este circuito</span>`);
+    }
   } else if (inst.tipo === 'vrf') {
     const disj = qeDisj(inA);
     linhas.push(`${inst.nome} (UE) | Pn el. ${d.pn} kW | In ${inTxt} | disjuntor ${disj} + dif. ${qeDifCal(disj)} tipo ${fase === 'tri' ? 'B' : 'F'} | ${qeCabo(fase, fase !== 'mono', qeSeccao(parseFloat(disj) || 16))}`);
@@ -261,6 +273,8 @@ function qeCaractPergunta() {
   const inst = qeState.instancias[qeState.instAtual];
   if (!inst) { qeProximoTipo(); return; }
   const perguntas = QE_CARACT[inst.tipo] || [];
+  // saltar perguntas condicionais (so_se) que não se aplicam [v0.4]
+  while (perguntas[qeState.cIdx] && perguntas[qeState.cIdx].so_se && !perguntas[qeState.cIdx].so_se(inst.dados)) qeState.cIdx++;
   const c = perguntas[qeState.cIdx];
   if (!c) {
     // instância completa → próxima do mesmo tipo, ou próximo tipo
@@ -407,6 +421,12 @@ function qeCircuitos() {
     } else if (inst.tipo === 'uta') {
       const utaQE = d.ctrl === 'qe';
       circ.push({ nome: inst.nome, fase, cadeia: utaQE ? ['disj', 'dif', 'km'] : ['disj', 'dif'], prot: qeDisj(inA), dif: 'A', carga: 'caixa', cargaTxt: 'UTA', info: [`${d.pn} kW · ${inTxt}`, qeCaboTxt(inst)], cont: qeTemContagem(d.pn), cmdTipo: utaQE ? 'relogio' : null, temGM: false, relogio: utaQE });
+      if (d.ue === 'sim') { // condensadora DX dedicada [v0.4 — pedido BB 09/09/2026]
+        const ueFase = d.ue_fase || 'tri';
+        const ueIn = d.ue_in > 0 ? d.ue_in : qeInCalc(d.ue_pn, ueFase);
+        const ueDisj = qeDisj(ueIn);
+        circ.push({ nome: inst.nome + ' UE', fase: ueFase, cadeia: ['disj', 'dif'], prot: ueDisj, dif: ueFase === 'tri' ? 'B' : 'F', carga: 'caixa', cargaTxt: 'UE UTA', info: [`${d.ue_pn} kW · ${ueIn.toFixed(1)}A${d.ue_in > 0 ? '' : '*'}`, qeCabo(ueFase, ueFase !== 'mono', qeSeccao(parseFloat(ueDisj) || 16)).replace('XZ1 (frt,zh) ', '')] });
+      }
     } else if (inst.tipo === 'vrf') {
       circ.push({ nome: inst.nome + ' UE', fase, cadeia: ['disj', 'dif'], prot: qeDisj(inA), dif: fase === 'tri' ? 'B' : 'F', carga: 'caixa', cargaTxt: 'VRF', info: [`${d.pn} kW · ${inTxt}`, qeCaboTxt(inst)], cont: qeTemContagem(d.pn) });
       qeGruposUIs(d.nuis).forEach(g => {
