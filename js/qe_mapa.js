@@ -80,6 +80,7 @@ function qmPergunta() {
 
 inputHandlers['qe_mapa'] = function(val) {
   addUser(val || '—'); disableInput();
+  if (qm.passo === 'fs') { qm.passo = null; const fs = qmNum(val); qmGerarFinal(fs && fs>0 && fs<=1 ? fs : 1.0); return; }
   if (!qm.quadro) { qm.quadro = val.trim() || 'QE.AVAC'; addBot('Quadro <strong>'+qm.quadro+'</strong>. Vamos aos circuitos.'); qmMenuTipos(); return; }
   const [campo] = qm.fila.shift();
   qm.tmp[campo] = val.trim();
@@ -123,7 +124,7 @@ function qmCalcula() {
   const difCal = QM_DIF.find(c => c >= disj) || 125;
   if (pn > 12) obs.push('⚡ CONTAGEM PERMANENTE no circuito [138-I, Tab.18]');
 
-  const c = { etiqueta: d.etiqueta||'—', equip: d.equip||'—',
+  const c = { _in: mca, _fases: fases, etiqueta: d.etiqueta||'—', equip: d.equip||'—',
     alim: fases===3 ? '400V 3N~' : '230V 1~', pn,
     inmca: (qm.tipo==='resist'? mca.toFixed(1) : String(d.mca||'—')) + (mfa? ' / '+mfa : ''),
     disj: disj+'A C', dif: difCal+'A tipo '+dif, cabo, obs: obs.join('; ') };
@@ -133,6 +134,12 @@ function qmCalcula() {
 }
 
 function qmGerar() {
+  qm.passo = 'fs';
+  addBot('Antes do mapa, a <strong>cabeça do quadro</strong> — factor de simultaneidade para o geral? (<em>Enter = 1,0</em> — regra da casa: totalidade das cargas, reserva 30%)');
+  enableInput('1,0');
+}
+
+function qmGerarFinal(fs) {
   const th = x=>'<th style="padding:3px 6px;border:1px solid #2e4880;font-size:12px">'+x+'</th>';
   const td = x=>'<td style="padding:3px 6px;border:1px solid #2e4880;font-size:12px">'+x+'</td>';
   let html = '<strong>'+qm.quadro+'</strong> — mapa de circuitos<br><div style="overflow-x:auto"><table style="border-collapse:collapse;margin-top:6px"><tr>'+
@@ -140,6 +147,17 @@ function qmGerar() {
   qm.circuitos.forEach(c => { html += '<tr>'+[c.etiqueta,c.equip,c.alim,c.pn||'—',c.inmca,c.disj,c.dif,c.cabo,c.obs||''].map(td).join('')+'</tr>'; });
   html += '</table></div>';
   addBot(html);
+  // ── cabeça do quadro ──
+  const pnT = qm.circuitos.reduce((s,c)=>s+(c.pn||0),0);
+  const inT = qm.circuitos.reduce((s,c)=>s+(c._fases===3? c._in : c._in/3),0) * fs;
+  let geral = QM_DISJ.find(c=>c>=inT);
+  const secG = geral ? QM_IZ.find(([sz,iz])=>iz>=geral && sz>=2.5) : null;
+  qm.cabeca = { pnT, inT, fs, geral: geral? geral+'A' : '>125A — dimensionar à mão',
+    cabo: secG? '5G'+String(secG[0]).replace('.',',') : 'a dimensionar' };
+  addBot('<strong>CABEÇA DO QUADRO ('+qm.quadro+')</strong><br>'+
+    'Potência instalada: <strong>'+pnT.toFixed(1)+' kW</strong> · Corrente de projecto (equiv. 3~, f.s. '+fs.toFixed(2).replace('.',',')+'): <strong>'+inT.toFixed(1)+' A</strong><br>'+
+    'Interruptor/disjuntor geral: <strong>'+qm.cabeca.geral+'</strong> c/ <strong>bobina MN</strong> (CDI) · Alimentação (empreitada de electricidade): <strong>XZ1 '+qm.cabeca.cabo+'</strong> <em>(indicativa — confirmar no projecto eléctrico)</em><br>'+
+    'Reserva de espaço: <strong>≥30%</strong> [CTG da casa]');
   addBot('<strong>Notas gerais do quadro</strong> (vão no TSV):<br>1. Corte de emergência por <strong>bobina de falta de tensão (MN)</strong> comandada pela CDI — segurança positiva, rearme manual.<br>2. Diferenciais B/F/A pela natureza da carga; <strong>nunca tipo AC</strong>.<br>3. Cabos pelo MCA do fabricante; disjuntor nunca acima do MFA.<br>4. Interligações de comando (F1/F2, UTA↔UE, termóstatos) em <strong>LiHCH</strong>, fora do QE — ver desenho de comando.<br>5. Este mapa é a peça de dimensionamento; esquemas de execução pelo quadrista, para aprovação.');
   addPills([
     { label: '📋 Copiar TSV (colar no Excel)', mantem: true, action: qmCopiar },
@@ -151,6 +169,7 @@ function qmGerar() {
 function qmCopiar() {
   let tsv = qm.quadro+'\n'+['Circuito','Equipamento','Alimentação','Pn (kW)','In-MCA / MFA (A)','Disjuntor','Diferencial','Cabo XZ1 (frt,zh)','Observações'].join('\t')+'\n';
   qm.circuitos.forEach(c => { tsv += [c.etiqueta,c.equip,c.alim,c.pn||'',c.inmca,c.disj,c.dif,c.cabo,c.obs||''].join('\t')+'\n'; });
+  if (qm.cabeca) tsv += '\nCABEÇA DO QUADRO\tPn instalada: '+qm.cabeca.pnT.toFixed(1)+' kW\tIn projecto (f.s. '+qm.cabeca.fs+'): '+qm.cabeca.inT.toFixed(1)+' A\tGeral: '+qm.cabeca.geral+' c/ bobina MN (CDI)\tAlimentação: XZ1 '+qm.cabeca.cabo+' (indicativa, pela empreitada de electricidade)\tReserva de espaço >=30%\n';
   tsv += '\nNOTAS GERAIS\n1. Corte de emergência: bobina de falta de tensão (MN) comandada pela CDI (segurança positiva; rearme manual). MX só com linha vigiada e alimentação socorrida.\n2. Diferenciais: 3~ c/ VFD/EC → tipo B; 1~ c/ electrónica → tipo F; restantes → tipo A. Nunca tipo AC.\n3. Cabos dimensionados pelo MCA do fabricante; disjuntor entre MCA e MFA.\n4. Contagem permanente nos circuitos >12 kW [Portaria 138-I, Tab.18].\n5. Comando em LiHCH (halogen-free), fora do QE.\n6. Este mapa constitui a peça de dimensionamento dos QE.AVAC; esquemas de execução pelo quadrista, para aprovação.\n';
   navigator.clipboard.writeText(tsv).then(()=>addBot('✓ TSV copiado — colar directo no Excel.'));
 }
