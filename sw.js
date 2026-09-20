@@ -1,4 +1,4 @@
-const CACHE_NAME = 'alios-calculos-v62';
+const CACHE_NAME = 'alios-calculos-v63';
 const ASSETS = [
   './',
   './index.html',

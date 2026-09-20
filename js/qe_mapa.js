@@ -91,6 +91,8 @@ inputHandlers['qe_mapa'] = function(val) {
   qmPergunta();
 };
 
+inputHandlers['qe_mapa'].aceitaVazio = true;  // "Enter se não indicado" tem de funcionar
+
 function qmNum(x) { const v = parseFloat(String(x).replace(',','.')); return isNaN(v) ? null : v; }
 
 function qmCalcula() {

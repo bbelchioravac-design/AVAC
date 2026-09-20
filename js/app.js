@@ -638,10 +638,9 @@ const inputHandlers = {};
 
 function enviar() {
   const val = document.getElementById('inp').value.trim();
-  if (!val) return;
-  if (modo && inputHandlers[modo]) {
-    inputHandlers[modo](val);
-  }
+  const h = modo && inputHandlers[modo];
+  if (!val && !(h && h.aceitaVazio)) return;  // Enter vazio só passa se a ferramenta o aceitar [v62, qe_mapa]
+  if (h) h(val);
 }
 
 // ─── Service Worker ───
