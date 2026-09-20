@@ -208,6 +208,7 @@ tr:nth-child(even) td{background:#f2f6f9}
 .cabeca{margin-top:10px;border:1.5px solid #123c5a;border-radius:4px;padding:7px 10px;display:flex;gap:22px;flex-wrap:wrap}
 .cabeca b{color:#123c5a}
 .notas{margin-top:9px;font-size:9px;color:#333;column-count:2;column-gap:24px}
+.notas div{break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:3.5px}
 .rodape{margin-top:10px;display:flex;justify-content:space-between;font-size:9px;color:#666;border-top:0.5px solid #9fb0bd;padding-top:5px}
 </style></head><body>
 <div class="top"><div><h1>${esc(qm.quadro)} — MAPA DE CIRCUITOS AVAC</h1>
@@ -215,7 +216,7 @@ tr:nth-child(even) td{background:#f2f6f9}
 <div class="marca">ALIOS ONE Cálculos</div></div>
 <table><tr><th>Circuito</th><th>Equipamento</th><th>Alim.</th><th>Pn (kW)</th><th>In-MCA / MFA (A)</th><th>Disjuntor</th><th>Diferencial</th><th>Cabo XZ1 (frt,zh)</th><th>Observações</th></tr>${linhas}</table>
 ${cb ? '<div class="cabeca"><span>Potência instalada: <b>'+cb.pnT.toFixed(1)+' kW</b></span><span>Corrente de projecto (equiv. 3~, f.s. '+cb.fs+'): <b>'+cb.inT.toFixed(1)+' A</b></span><span>Geral: <b>'+esc(cb.geral)+'</b> c/ bobina MN (CDI)</span><span>Alimentação: <b>XZ1 '+esc(cb.cabo)+'</b> (indicativa — projecto eléctrico)</span><span>Reserva de espaço: <b>≥30%</b></span></div>' : ''}
-<div class="notas">1. Corte de emergência por bobina de falta de tensão (MN) comandada pela CDI — segurança positiva, rearme manual; MX só com linha vigiada e alimentação socorrida. 2. Diferenciais: 3~ c/ VFD/EC → tipo B; 1~ c/ electrónica → tipo F; restantes → tipo A; nunca tipo AC. 3. Cabos dimensionados pelo MCA do fabricante; disjuntor nunca acima do MFA. 4. Contagem permanente nos circuitos &gt;12 kW [Portaria 138-I, Tab.18]. 5. Interligações de comando em LiHCH (halogen-free), fora do QE — ver desenho de comando. 6. Cabos de potência XZ1 (frt,zh) em esteira, com separação potência/comando.</div>
+<div class="notas"><div>1. Corte de emergência por bobina de falta de tensão (MN) comandada pela CDI — segurança positiva, rearme manual; MX só com linha vigiada e alimentação socorrida.</div><div>2. Diferenciais: 3~ c/ VFD/EC → tipo B; 1~ c/ electrónica → tipo F; restantes → tipo A; nunca tipo AC.</div><div>3. Cabos dimensionados pelo MCA do fabricante; disjuntor nunca acima do MFA.</div><div>4. Contagem permanente nos circuitos &gt;12 kW [Portaria 138-I, Tab.18].</div><div>5. Interligações de comando em LiHCH (halogen-free), fora do QE — ver desenho de comando.</div><div>6. Cabos de potência XZ1 (frt,zh) em esteira, com separação potência/comando.</div></div>
 <div class="rodape"><span>ALIOS ONE Cálculos — mapa gerado em ${hoje}</span><span>Verificado: ______________________</span></div>
 <script>window.onload=()=>window.print()<\/script></body></html>`);
   w.document.close();
