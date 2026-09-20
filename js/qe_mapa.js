@@ -193,8 +193,8 @@ function qmPDF() {
   const w = window.open('', '_blank');
   w.document.write(`<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8"><title>${esc(qm.quadro)} — Mapa de circuitos</title>
 <style>
-@page{size:A4 landscape;margin:12mm}
-body{font-family:'Segoe UI',Arial,sans-serif;color:#111;margin:0;font-size:10.5px}
+@page{size:A4 landscape;margin:0}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#111;margin:0;padding:12mm;font-size:10.5px}
 h1{font-size:16px;margin:0 0 2px}h2{font-size:11px;font-weight:400;color:#555;margin:0 0 10px}
 .top{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2.5px solid #123c5a;padding-bottom:6px;margin-bottom:10px}
 .marca{font-size:13px;font-weight:700;color:#123c5a}
